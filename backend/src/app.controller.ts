@@ -6,7 +6,10 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  async getHello() {
+    await this.appService.signUp({
+      email: 'noah.janzen@hs-ruhrwest.de',
+      name: 'Noah',
+    });
   }
 }
