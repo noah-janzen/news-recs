@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CreateUserDto } from './cto/create-user-dto';
 import { User, UserDocument } from './user.model';
 import { MailService } from 'src/mail/mail.service';
-import { DateUtil } from 'src/common/date-util';
+import { DateUtil } from 'src/common/util/date-util';
 import { ConfirmationFailedException } from 'src/common/exceptions/confirmation-failed.exception';
 
 @Injectable()
@@ -42,26 +42,29 @@ export class UsersService {
     }
 
     this.mailService.sendUserConfirmation(newUser);
+
+    return newUser;
   }
 
   /**
    * Confirms an user account if
-   * - the user has not already been confirmed,
    * - the passed user id belongs to a user in the database,
+   * - the user has not already been confirmed,
    * - the passed token matches the registrationToken of the given user,
    * - the registration period is not expired
    * @param userId userId of the user to confirm
    * @param token registration token of the user to confirm
    */
   async confirm(userId: string, token: string) {
-    const user = await this.userModel.findById(userId).exec();
+    let user;
+    try {
+      user = await this.userModel.findById(userId).exec();
+    } catch (error) {
+      throw new ConfirmationFailedException('UserId invalid');
+    }
 
     if (user.isConfirmed) {
       throw new ConfirmationFailedException('User already confirmed');
-    }
-
-    if (!user) {
-      throw new ConfirmationFailedException('UserId invalid');
     }
 
     if (user.confirmationToken !== token) {
@@ -75,7 +78,6 @@ export class UsersService {
     user.isConfirmed = true;
     user.confirmationToken = null;
     user.confirmationTokenTimestamp = null;
-
     await user.save();
   }
 
