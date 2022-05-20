@@ -13,7 +13,7 @@ export class MailService {
   async sendUserConfirmation(user: User) {
     const confirmationLink = new URL(
       this.configService.get<string>('CONFIRMATION_LINK_HOST') +
-        '/users/confirm',
+        '/auth/confirm',
     );
     confirmationLink.searchParams.set('userId', user.id);
     confirmationLink.searchParams.set('token', user.confirmationToken);

@@ -8,7 +8,7 @@ import {
   Length,
 } from 'class-validator';
 import { Date } from 'mongoose';
-import { Gender } from '../user.model';
+import { Gender } from '../../users/user.model';
 
 export class CreateUserDto {
   @IsEmail()
