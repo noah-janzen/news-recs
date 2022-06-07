@@ -15,15 +15,7 @@ export class AuthController {
 
   @Post('sign-up')
   async signUp(@Body() createUserDto: CreateUserDto) {
-    try {
-      await this.authService.signUp(createUserDto);
-    } catch (error) {
-      const message = ['User creation failed'];
-      if (error.code === 11000 && error.keyPattern.email === 1) {
-        message.push('The email address has already been registered.');
-      }
-      throw new BadRequestException(message);
-    }
+    await this.authService.signUp(createUserDto);
   }
 
   @Get('confirm')
@@ -31,13 +23,7 @@ export class AuthController {
     @Query('userId') userId: string,
     @Query('token') token: string,
   ) {
-    try {
-      await this.authService.confirm(userId, token);
-    } catch (ex) {
-      return 'Error: ' + ex.getResponse().error;
-    }
-
-    return `Registration confirmed`;
+    await this.authService.confirm(userId, token);
   }
 
   @Post('sign-in')

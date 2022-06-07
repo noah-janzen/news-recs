@@ -1,7 +1,7 @@
 import * as argon2 from 'argon2';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { CreateUserDto } from './dto';
@@ -23,14 +23,24 @@ export class AuthService {
    * @param createUserDto user to sign up
    */
   async signUp(createUserDto: CreateUserDto) {
-    const hashedPassword = await this.hash(createUserDto.password);
+    const hashedPassword = await argon2.hash(createUserDto.password);
     const confirmationToken = uuidv4();
 
-    const newUser = await this.usersService.create({
-      ...createUserDto,
-      password: hashedPassword,
-      confirmationToken,
-    });
+    let newUser;
+    try {
+      newUser = await this.usersService.create({
+        ...createUserDto,
+        password: hashedPassword,
+        confirmationToken,
+      });
+    } catch (error) {
+      if (this.emailAlreadyRegistered(error)) {
+        throw new BadRequestException(
+          'This email address has already been registered.',
+        );
+      }
+      throw error;
+    }
 
     this.mailService.sendUserConfirmation(newUser);
 
@@ -51,41 +61,38 @@ export class AuthService {
     try {
       user = await this.usersService.findById(userId);
     } catch (error) {
-      throw new ConfirmationFailedException('UserId invalid');
+      throw new BadRequestException('UserId invalid');
     }
 
     if (!user) {
-      throw new ConfirmationFailedException('User not found');
+      throw new BadRequestException('Could not find user');
     }
 
     if (user.isConfirmed) {
-      throw new ConfirmationFailedException('User already confirmed');
+      throw new BadRequestException('User already confirmed');
     }
 
     if (user.confirmationToken !== token) {
-      throw new ConfirmationFailedException('Token invalid');
+      throw new BadRequestException('Token invalid');
     }
 
     if (this.isRegistrationPeriodExpired(user.confirmationTokenTimestamp)) {
-      throw new ConfirmationFailedException('Registration link expired');
+      throw new BadRequestException('Registration link expired');
     }
 
     await this.usersService.confirm(userId);
   }
 
-  signIn() {}
+  signIn() {
+    // TODO: Implement method
+  }
 
-  logout() {}
+  logout() {
+    // TODO: Implement method
+  }
 
-  refreshTokens() {}
-
-  /**
-   * Helper method that hashes a passed value
-   * @param value value to hash
-   * @returns hashed value
-   */
-  private async hash(value: string) {
-    return await argon2.hash(value);
+  refreshTokens() {
+    // TODO: Implement method
   }
 
   /**
@@ -99,5 +106,9 @@ export class AuthService {
       'CONFIRMATION_PERIOD_IN_HOURS',
     );
     return !DateUtil.isInRange(registrationDate, CONFIRMATION_PERIOD_IN_HOURS);
+  }
+
+  private emailAlreadyRegistered(error) {
+    return error.code === 11000 && error.keyPattern.email === 1;
   }
 }
