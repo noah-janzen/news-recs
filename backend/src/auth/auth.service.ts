@@ -1,14 +1,21 @@
 import * as argon2 from 'argon2';
 import { v4 as uuidv4 } from 'uuid';
 
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
-import { CreateUserDto } from './dto';
+import { CreateUserDto, LoginUserDto } from './dto';
 import { MailService } from 'src/mail/mail.service';
 import { UsersService } from 'src/users/users.service';
-import { ConfirmationFailedException } from 'src/common/exceptions/confirmation-failed.exception';
 import { DateUtil } from 'src/common/util/date-util';
+import { User, UserDocument } from 'src/users/user.model';
+import { Tokens } from './types';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +23,7 @@ export class AuthService {
     private configService: ConfigService,
     private mailService: MailService,
     private usersService: UsersService,
+    private jwtService: JwtService,
   ) {}
 
   /**
@@ -83,16 +91,62 @@ export class AuthService {
     await this.usersService.confirm(userId);
   }
 
-  signIn() {
-    // TODO: Implement method
+  async resendConfirmationLink(loginUserDto: LoginUserDto) {
+    const user = await this.validateCredentials(
+      loginUserDto.email,
+      loginUserDto.password,
+    );
+
+    if (user.isConfirmed) {
+      throw new BadRequestException('User already confirmed.');
+    }
+
+    const newConfirmationToken = uuidv4();
+    user.confirmationToken = newConfirmationToken;
+    await user.save();
+
+    await this.mailService.sendUserConfirmation(user);
   }
 
-  logout() {
-    // TODO: Implement method
+  async signIn(loginUserDto: LoginUserDto): Promise<Tokens> {
+    const user = await this.validateUser(
+      loginUserDto.email,
+      loginUserDto.password,
+    );
+
+    const tokens = await this.getTokens(user);
+    const hashedRefreshToken = await argon2.hash(tokens.refresh_token);
+    await this.usersService.updateRefreshToken(user, hashedRefreshToken);
+
+    return tokens;
   }
 
-  refreshTokens() {
-    // TODO: Implement method
+  async logout(userId: string) {
+    const user = await this.usersService.findById(userId);
+    await this.usersService.deleteRefreshToken(user);
+  }
+
+  async refreshTokens(userId: string, refreshToken: string) {
+    const user = await this.usersService.findById(userId);
+
+    if (!user || !user.refreshToken)
+      throw new UnauthorizedException('Access Denied');
+
+    const requestTokenCorrect = await argon2.verify(
+      user.refreshToken,
+      refreshToken,
+    );
+
+    if (!requestTokenCorrect) {
+      await this.usersService.deleteRefreshToken(user);
+      throw new UnauthorizedException('Access Denied');
+    }
+
+    const newTokens = await this.getTokens(user);
+    const hashedRefreshToken = await argon2.hash(newTokens.refresh_token);
+    await this.usersService.updateRefreshToken(user, hashedRefreshToken);
+
+    return newTokens;
   }
 
   /**
@@ -106,6 +160,57 @@ export class AuthService {
       'CONFIRMATION_PERIOD_IN_HOURS',
     );
     return !DateUtil.isInRange(registrationDate, CONFIRMATION_PERIOD_IN_HOURS);
+  }
+
+  private async getTokens(user: User): Promise<Tokens> {
+    const jwtPayload = {
+      sub: user.id,
+      email: user.email,
+      roles: user.roles,
+    };
+
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(jwtPayload, {
+        secret: 'at-secret',
+        expiresIn: '15m',
+      }),
+      this.jwtService.signAsync(jwtPayload, {
+        secret: 'rt-secret',
+        expiresIn: '7d',
+      }),
+    ]);
+
+    return {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    };
+  }
+
+  private async validateUser(
+    email: string,
+    password: string,
+  ): Promise<UserDocument> {
+    const user = await this.validateCredentials(email, password);
+
+    if (!user.isConfirmed) {
+      throw new ForbiddenException('User not confirmed.');
+    }
+
+    return user;
+  }
+
+  private async validateCredentials(
+    email: string,
+    password: string,
+  ): Promise<UserDocument> {
+    const user = await this.usersService.findOne(email);
+    const passwordCorrect = await argon2.verify(user.password, password);
+
+    if (!user || !passwordCorrect) {
+      throw new ForbiddenException('Username or password invalid.');
+    }
+
+    return user;
   }
 
   private emailAlreadyRegistered(error) {

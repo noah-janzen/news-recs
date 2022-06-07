@@ -20,7 +20,7 @@ export class UsersService {
     return this.userModel.findById(userId).exec();
   }
 
-  async findOne(email: string): Promise<User | undefined> {
+  async findOne(email: string) {
     let user;
     try {
       user = await this.userModel.findOne({ email }).exec();
@@ -35,9 +35,19 @@ export class UsersService {
     const user = await this.userModel.findById(userId).exec();
 
     user.isConfirmed = true;
-    user.confirmationToken = null;
-    user.confirmationTokenTimestamp = null;
+    user.confirmationToken = undefined;
+    user.confirmationTokenTimestamp = undefined;
 
+    await user.save();
+  }
+
+  async updateRefreshToken(user: UserDocument, hashedRefreshToken: string) {
+    user.refreshToken = hashedRefreshToken;
+    await user.save();
+  }
+
+  async deleteRefreshToken(user: UserDocument) {
+    user.refreshToken = null;
     await user.save();
   }
 }

@@ -4,6 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MailModule } from './mail/mail.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenAuthGuard } from './common/guards';
 
 @Module({
   imports: [
@@ -17,6 +19,11 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     AuthModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
