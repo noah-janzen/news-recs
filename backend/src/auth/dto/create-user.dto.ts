@@ -6,6 +6,7 @@ import {
   IsNumberString,
   IsString,
   Length,
+  MaxLength,
 } from 'class-validator';
 import { Date } from 'mongoose';
 import { Gender } from '../../users/user.model';
@@ -13,6 +14,7 @@ import { Gender } from '../../users/user.model';
 export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
+  @MaxLength(40)
   email: string;
 
   @IsString()
@@ -22,10 +24,12 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(40)
   readonly firstName: string;
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(40)
   readonly lastName: string;
 
   @IsNotEmpty()
@@ -43,5 +47,6 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(40)
   readonly city: string;
 }
