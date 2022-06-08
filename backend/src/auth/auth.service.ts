@@ -43,9 +43,9 @@ export class AuthService {
       });
     } catch (error) {
       if (this.emailAlreadyRegistered(error)) {
-        throw new BadRequestException(
+        throw new BadRequestException([
           'This email address has already been registered.',
-        );
+        ]);
       }
       throw error;
     }
