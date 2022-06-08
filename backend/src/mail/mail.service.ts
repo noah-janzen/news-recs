@@ -28,4 +28,18 @@ export class MailService {
       },
     });
   }
+
+  async sendUserPasswordResetToken(user: User) {
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: this.configService.get<string>(
+        'PASSWORD_RESET_TOKEN_MAIL_SUBJECT',
+      ),
+      template: 'password-reset-token.hbs',
+      context: {
+        name: user.firstName,
+        passwordResetToken: user.passwordResetToken,
+      },
+    });
+  }
 }

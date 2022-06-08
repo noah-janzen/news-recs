@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -7,19 +6,22 @@ import {
   HttpStatus,
   Post,
   Query,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 import {
   GetCurrentUser,
   GetCurrentUserId,
   Public,
 } from 'src/common/decorators';
-import { AccessTokenAuthGuard, RefreshTokenAuthGuard } from 'src/common/guards';
+
+import { RefreshTokenAuthGuard } from 'src/common/guards';
 import { AuthService } from './auth.service';
-import { CreateUserDto, LoginUserDto } from './dto';
+import {
+  CreateUserDto,
+  ForgotPasswordDto,
+  LoginUserDto,
+  ResetPasswordDto,
+} from './dto';
 import { Tokens } from './types';
 
 @Controller('auth')
@@ -69,5 +71,19 @@ export class AuthController {
     @GetCurrentUser('refreshToken') refreshToken: string,
   ) {
     return this.authService.refreshTokens(userId, refreshToken);
+  }
+
+  @Post('forgot-password')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    await this.authService.sendPasswordResetToken(forgotPasswordDto.email);
+  }
+
+  @Post('reset-password')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    await this.authService.resetPassword(resetPasswordDto);
   }
 }

@@ -76,4 +76,42 @@ export class UsersService {
     user.refreshToken = null;
     await user.save();
   }
+
+  /**
+   * Creates a password reset token and stores it with its timestmap in the database
+   * @param user to create the token for
+   */
+  async createPasswordResetToken(user: UserDocument) {
+    user.passwordResetToken = this.generatePasswordResetToken();
+    user.passwordResetTokenTimestamp = new Date();
+    await user.save();
+  }
+
+  /**
+   * Changes the password of an user
+   * @param user to change the password for
+   * @param password hash of the password
+   */
+  async changePassword(user: UserDocument, password: string) {
+    user.password = password;
+    await user.save();
+  }
+
+  /**
+   * Deletes the password reset token and its timestamp from the database.
+   * @param user to delete the token for
+   */
+  async deletePasswordResetToken(user: UserDocument) {
+    user.passwordResetToken = undefined;
+    user.passwordResetTokenTimestamp = undefined;
+    await user.save();
+  }
+
+  /**
+   * Helper method to generate a password reset token
+   * @returns generated password reset token
+   */
+  private generatePasswordResetToken() {
+    return Math.floor(100_000 + Math.random() * 900_000);
+  }
 }

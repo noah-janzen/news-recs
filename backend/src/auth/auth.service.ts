@@ -1,5 +1,6 @@
 import * as argon2 from 'argon2';
 import { v4 as uuidv4 } from 'uuid';
+import { Date as mongooseDate } from 'mongoose';
 
 import {
   BadRequestException,
@@ -10,7 +11,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
-import { CreateUserDto, LoginUserDto } from './dto';
+import { CreateUserDto, LoginUserDto, ResetPasswordDto } from './dto';
 import { MailService } from 'src/mail/mail.service';
 import { UsersService } from 'src/users/users.service';
 import { DateUtil } from 'src/common/util/date-util';
@@ -171,9 +172,57 @@ export class AuthService {
   }
 
   /**
+   * Sends a password reset token to the user belonging to the passed email
+   * @param email of the user
+   */
+  async sendPasswordResetToken(email: string) {
+    const user = await this.usersService.findOne(email);
+    if (!user || !user.isConfirmed) {
+      // do nothing in order to not reveal if an email is signed up or not
+      return;
+    }
+
+    await this.usersService.createPasswordResetToken(user);
+    await this.mailService.sendUserPasswordResetToken(user);
+  }
+
+  /**
+   * Changes the password of an user iff the given token is not expired and valid
+   * @param resetPasswordDto reset password data transfer object
+   */
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const user = await this.usersService.findOne(resetPasswordDto.email);
+    if (!user || !user.passwordResetToken) {
+      throw new BadRequestException('Email or password reset token invalid.');
+    }
+
+    // check if token is expired
+    const tokenExpired = this.isPasswordResetPeriodExpired(
+      user.passwordResetTokenTimestamp,
+    );
+    if (tokenExpired) {
+      await this.usersService.deletePasswordResetToken(user);
+      throw new BadRequestException('Password reset code expired.');
+    }
+
+    // check if token is valid
+    const tokenValid =
+      user.passwordResetToken.toString() ===
+      resetPasswordDto.passwordResetToken;
+    if (!tokenValid) {
+      throw new BadRequestException('Email or password reset token invalid.');
+    }
+
+    // change password
+    const hashedPassword = await argon2.hash(resetPasswordDto.newPassword);
+    await this.usersService.changePassword(user, hashedPassword);
+    await this.usersService.deletePasswordResetToken(user);
+  }
+
+  /**
    * Helper method that checks whether the confirmation token timestamp is not expired
    * @param confirmationTokenTimestamp timestamp of the token creation
-   * @returns true iff the timestamp is not expired
+   * @returns true iff the timestamp is expired
    */
   private isRegistrationPeriodExpired(confirmationTokenTimestamp) {
     const registrationDate = new Date(confirmationTokenTimestamp.toString());
@@ -181,6 +230,19 @@ export class AuthService {
       'CONFIRMATION_PERIOD_IN_HOURS',
     );
     return !DateUtil.isInRange(registrationDate, CONFIRMATION_PERIOD_IN_HOURS);
+  }
+
+  /**
+   * Helper method that checks whether the password reset token timestamp is not expired
+   * @param passwordResetTokenTimestamp timestamp of the token creation
+   * @returns true iff the timestamp is expired
+   */
+  private isPasswordResetPeriodExpired(passwordResetTokenTimestamp) {
+    const passwordResetDate = new Date(passwordResetTokenTimestamp.toString());
+    const CONFIRMATION_PERIOD_IN_HOURS = this.configService.get<number>(
+      'PASSWORD_RESET_PERIOD_IN_HOURS',
+    );
+    return !DateUtil.isInRange(passwordResetDate, CONFIRMATION_PERIOD_IN_HOURS);
   }
 
   /**

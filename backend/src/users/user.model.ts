@@ -1,4 +1,4 @@
-import { Date, Document } from 'mongoose';
+import { Document } from 'mongoose';
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
@@ -42,10 +42,7 @@ export class User {
   })
   isConfirmed: boolean;
 
-  @Prop({
-    type: Date || null,
-    default: new Date(),
-  })
+  @Prop({ type: Date })
   confirmationTokenTimestamp: Date;
 
   @Prop()
@@ -85,6 +82,12 @@ export class User {
     enum: Language,
   })
   language: Language;
+
+  @Prop()
+  passwordResetToken: number;
+
+  @Prop({ type: Date })
+  passwordResetTokenTimestamp: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
