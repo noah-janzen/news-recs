@@ -33,6 +33,7 @@ export class AuthService {
   async signUp(createUserDto: CreateUserDto) {
     const hashedPassword = await argon2.hash(createUserDto.password);
     const confirmationToken = uuidv4();
+    const confirmationTokenTimestamp = new Date();
 
     let newUser;
     try {
@@ -40,6 +41,7 @@ export class AuthService {
         ...createUserDto,
         password: hashedPassword,
         confirmationToken,
+        confirmationTokenTimestamp,
       });
     } catch (error) {
       if (this.emailAlreadyRegistered(error)) {
