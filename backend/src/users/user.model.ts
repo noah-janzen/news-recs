@@ -8,10 +8,6 @@ export enum Gender {
   D = 'D',
 }
 
-export enum Role {
-  READER = 'READER',
-}
-
 export type UserDocument = User & Document;
 
 @Schema()
@@ -41,7 +37,7 @@ export class User {
   isConfirmed: boolean;
 
   @Prop({
-    type: Date,
+    type: Date || null,
     default: new Date(),
   })
   confirmationTokenTimestamp: Date;
@@ -51,14 +47,6 @@ export class User {
 
   @Prop({ default: null })
   refreshToken: string;
-
-  @Prop({
-    required: true,
-    type: [String],
-    enum: Role,
-    default: [Role.READER],
-  })
-  roles: Role[];
 
   @Prop({ required: true })
   firstName: string;

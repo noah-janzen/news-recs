@@ -166,7 +166,6 @@ export class AuthService {
     const jwtPayload = {
       sub: user.id,
       email: user.email,
-      roles: user.roles,
     };
 
     const [accessToken, refreshToken] = await Promise.all([
