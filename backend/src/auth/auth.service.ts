@@ -91,6 +91,10 @@ export class AuthService {
     await this.usersService.confirm(userId);
   }
 
+  /**
+   * Resends a confirmation link with a new token to a user
+   * @param loginUserDto user credentials
+   */
   async resendConfirmationLink(loginUserDto: LoginUserDto) {
     const user = await this.validateCredentials(
       loginUserDto.email,
@@ -108,6 +112,11 @@ export class AuthService {
     await this.mailService.sendUserConfirmation(user);
   }
 
+  /**
+   * Signs in an user if the credentials are valid and the user is confirmed. Returns a pair of tokens and stores the hashed refresh token in the database
+   * @param loginUserDto user credentials
+   * @returns pair of tokens (access_token and refresh_token)
+   */
   async signIn(loginUserDto: LoginUserDto): Promise<Tokens> {
     const user = await this.validateUser(
       loginUserDto.email,
@@ -121,11 +130,21 @@ export class AuthService {
     return tokens;
   }
 
+  /**
+   * Logs out an user and deletes the refresh token hash from the database.
+   * @param userId user id of the user to log out
+   */
   async logout(userId: string) {
     const user = await this.usersService.findById(userId);
     await this.usersService.deleteRefreshToken(user);
   }
 
+  /**
+   * Refreshes the pair of tokens if the sent refresh token matches the stored refresh token in the database.
+   * @param userId user id of the user who wants to refresh his tokens
+   * @param refreshToken refresh token the user sent
+   * @returns pair of new tokens (access_token and refresh_token)
+   */
   async refreshTokens(userId: string, refreshToken: string) {
     const user = await this.usersService.findById(userId);
 
@@ -162,6 +181,11 @@ export class AuthService {
     return !DateUtil.isInRange(registrationDate, CONFIRMATION_PERIOD_IN_HOURS);
   }
 
+  /**
+   * Helper method that signs a new pair of tokens
+   * @param user for whom the tokens are issued
+   * @returns pair of tokens (access_token and refresh_token)
+   */
   private async getTokens(user: User): Promise<Tokens> {
     const jwtPayload = {
       sub: user.id,
@@ -185,6 +209,12 @@ export class AuthService {
     };
   }
 
+  /**
+   * Helper method that checks whether the sent credentials are valid and whether the user has been confirmed
+   * @param email of the user
+   * @param password of the user
+   * @returns the user iff the user is valid (credentials and confirmation)
+   */
   private async validateUser(
     email: string,
     password: string,
@@ -198,6 +228,12 @@ export class AuthService {
     return user;
   }
 
+  /**
+   * Helper method that checks whether the sent credentials are valid
+   * @param email of the user
+   * @param password of the user
+   * @returns the user iff the credentials are valid
+   */
   private async validateCredentials(
     email: string,
     password: string,
@@ -212,6 +248,11 @@ export class AuthService {
     return user;
   }
 
+  /**
+   * Helper method that evaluates whether the email has already been registered
+   * @param error MongoDB error
+   * @returns true iff the email has already been registered
+   */
   private emailAlreadyRegistered(error) {
     return error.code === 11000 && error.keyPattern.email === 1;
   }
