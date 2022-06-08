@@ -8,6 +8,12 @@ export enum Gender {
   D = 'D',
 }
 
+// ISO 639-1: two-letter codes
+export enum Language {
+  EN = 'EN',
+  DE = 'DE',
+}
+
 export type UserDocument = User & Document;
 
 @Schema()
@@ -72,6 +78,13 @@ export class User {
 
   @Prop({ required: true })
   city: string;
+
+  @Prop({
+    required: true,
+    type: String,
+    enum: Language,
+  })
+  language: Language;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -9,7 +9,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { Date } from 'mongoose';
-import { Gender } from '../../users/user.model';
+import { Gender, Language } from '../../users/user.model';
 
 export class CreateUserDto {
   @IsEmail()
@@ -32,7 +32,6 @@ export class CreateUserDto {
   @MaxLength(40)
   readonly lastName: string;
 
-  @IsNotEmpty()
   @IsEnum(Gender)
   readonly gender: Gender;
 
@@ -49,4 +48,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MaxLength(40)
   readonly city: string;
+
+  @IsEnum(Language)
+  readonly language: Language;
 }
