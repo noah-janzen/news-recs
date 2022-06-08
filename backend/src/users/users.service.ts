@@ -15,7 +15,12 @@ export class UsersService {
    * @param user to be stored
    * @returns the new user
    */
-  async create(user: CreateUserDto & { confirmationToken: string }) {
+  async create(
+    user: CreateUserDto & {
+      confirmationToken: string;
+      confirmationTokenTimestamp: Date;
+    },
+  ) {
     const newUser = new this.userModel(user);
     await newUser.save();
     return newUser;
@@ -26,7 +31,7 @@ export class UsersService {
    * @param userId of the user to find
    * @returns the user
    */
-  async findById(userId: string) {
+  findById(userId: string) {
     return this.userModel.findById(userId).exec();
   }
 
@@ -35,15 +40,8 @@ export class UsersService {
    * @param email of the user to find
    * @returns the user
    */
-  async findOne(email: string) {
-    let user;
-    try {
-      user = await this.userModel.findOne({ email }).exec();
-    } catch (error) {
-      throw new NotFoundException('Could not find user.');
-    }
-
-    return user;
+  findOne(email: string) {
+    return this.userModel.findOne({ email }).exec();
   }
 
   /**
