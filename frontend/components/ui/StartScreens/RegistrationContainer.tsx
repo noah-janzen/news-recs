@@ -25,7 +25,7 @@ function RegistrationContainer({ onNext, children, nextDisabled }: Props) {
         <Pressable onPress={backHandler} style={styles.backButton}>
           <Ionicons name="arrow-back-outline" size={24} color="black" />
         </Pressable>
-        <Title>Registrierung</Title>
+        <Title>Registrieren</Title>
         <View style={styles.childrenContainer}>{children}</View>
       </View>
 

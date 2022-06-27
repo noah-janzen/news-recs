@@ -2,16 +2,17 @@ import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { useState } from 'react'
 import { Text } from 'react-native'
 import Input from '../../components/ui/Input'
+import ButtonInput from '../../components/ui/StartScreens/Registration/ButtonInput'
 import GenderInput from '../../components/ui/StartScreens/Registration/GenderInput'
 
 import RegistrationContainer from '../../components/ui/StartScreens/RegistrationContainer'
 import { Gender } from '../../model/Gender'
-import { firstNameValid, lastNameValid } from '../../util/Validation'
+import { cityValid, firstNameValid, lastNameValid } from '../../util/Validation'
 
 export type Props = {
   navigation: NavigationProp<ParamListBase>
 }
-function RegistrationNameGenderScreen({ navigation }: Props) {
+function RegistrationPersonalDataScreen({ navigation }: Props) {
   const [inputs, setInputs] = useState({
     firstName: {
       value: '',
@@ -21,7 +22,15 @@ function RegistrationNameGenderScreen({ navigation }: Props) {
       value: '',
       isValid: false,
     },
+    city: {
+      value: '',
+      isValid: false,
+    },
     gender: {
+      value: null,
+      isValid: false,
+    },
+    language: {
       value: null,
       isValid: false,
     },
@@ -41,6 +50,9 @@ function RegistrationNameGenderScreen({ navigation }: Props) {
         case 'lastName':
           isValid = lastNameValid(enteredValue)
           break
+        case 'city':
+          isValid = cityValid(enteredValue)
+          break
         default:
           isValid = true
       }
@@ -59,7 +71,7 @@ function RegistrationNameGenderScreen({ navigation }: Props) {
     setSubmitted(true)
     if (!formValid()) return
 
-    navigation.navigate('RegistrationDateOfBirthCityLanguageScreen')
+    navigation.navigate('RegistrationCredentialsScreen')
   }
 
   function formValid() {
@@ -80,7 +92,7 @@ function RegistrationNameGenderScreen({ navigation }: Props) {
           value: inputs.firstName.value,
           onChangeText: (firstName: string) =>
             inputChangedHandler('firstName', firstName),
-          autoCapitalize: 'none',
+          autoCorrect: false,
         }}
       />
       <Input
@@ -91,16 +103,61 @@ function RegistrationNameGenderScreen({ navigation }: Props) {
           value: inputs.lastName.value,
           onChangeText: (lastName: string) =>
             inputChangedHandler('lastName', lastName),
-          autoCapitalize: 'none',
+          autoCorrect: false,
         }}
       />
-      <GenderInput
-        gender={inputs.gender.value}
-        onEnterGender={(gender) => inputChangedHandler('gender', gender)}
+
+      <Input
+        label="Stadt"
+        invalid={inputs.city.isValid ? null : 'Gib eine Stadt ein'}
         submitted={submitted}
+        textInputConfig={{
+          value: inputs.city.value,
+          onChangeText: (city: string) => inputChangedHandler('city', city),
+          autoCorrect: false,
+        }}
+      />
+
+      <ButtonInput
+        label="Geschlecht"
+        submitted={submitted}
+        onSelect={(gender) => inputChangedHandler('gender', gender)}
+        activeElement={inputs.gender.value}
+        errorLabel="Gib ein Geschlecht an"
+        items={[
+          {
+            label: 'männlich',
+            id: 'M',
+          },
+          {
+            label: 'weiblich',
+            id: 'W',
+          },
+          {
+            label: 'divers',
+            id: 'D',
+          },
+        ]}
+      />
+      <ButtonInput
+        label="Sprache"
+        submitted={submitted}
+        onSelect={(language) => inputChangedHandler('language', language)}
+        activeElement={inputs.language.value}
+        errorLabel="Gib eine Sprache an"
+        items={[
+          {
+            label: 'Deutsch 🇩🇪',
+            id: 'DE',
+          },
+          {
+            label: 'English 🇬🇧',
+            id: 'EN',
+          },
+        ]}
       />
     </RegistrationContainer>
   )
 }
 
-export default RegistrationNameGenderScreen
+export default RegistrationPersonalDataScreen

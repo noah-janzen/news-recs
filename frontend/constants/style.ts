@@ -9,7 +9,7 @@ export const GlobalStyles = {
     primary300: '#858AE3',
     primary400: '#7364D2',
     primary500: '#613DC1',
-    primary160: '#5829A7',
+    primary600: '#5829A7',
     primary700: '#4E148C',
     primary800: '#461177',
     primary900: '#3D0E61',

@@ -35,10 +35,10 @@ import {
 
 import WelcomeScreen from './screens/WelcomeScreen'
 import LoginScreen from './screens/LoginScreen'
-import RegistrationCredentialsScreen from './screens/Registration/RegistrationCredentialsScreen'
-import RegistrationNameGenderScreen from './screens/Registration/RegistrationNameGenderScreen'
-import RegistrationDateOfBirthCityLanguageScreen from './screens/Registration/RegistrationDateOfBirthCityLanguageScreen'
 import AppLoading from './screens/AppLoading'
+import RegistrationCredentialsScreen from './screens/Registration/RegistrationCredentialsScreen'
+import RegistrationPersonalDataScreen from './screens/Registration/RegistrationPersonalDataScreen'
+import RegistrationDateOfBirthScreen from './screens/Registration/RegistrationDateOfBirthScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -59,15 +59,18 @@ function StartScreensStack() {
         }}
       />
       <Stack.Screen
-        name="RegistrationNameGenderScreen"
-        component={RegistrationNameGenderScreen}
+        name="RegistrationPersonalDataScreen"
+        component={RegistrationPersonalDataScreen}
         options={{
           animation: 'slide_from_right',
         }}
       />
       <Stack.Screen
-        name="RegistrationDateOfBirthCityLanguageScreen"
-        component={RegistrationDateOfBirthCityLanguageScreen}
+        name="RegistrationDateOfBirthScreen"
+        component={RegistrationDateOfBirthScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
       />
     </Stack.Navigator>
   )

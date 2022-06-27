@@ -1,8 +1,6 @@
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { useState } from 'react'
 import { Text } from 'react-native'
-import DatePicker from 'react-native-date-picker'
-import Input from '../../components/ui/Input'
 
 import RegistrationContainer from '../../components/ui/StartScreens/RegistrationContainer'
 
@@ -10,19 +8,11 @@ export type Props = {
   navigation: NavigationProp<ParamListBase>
 }
 
-function RegistrationDateOfBirthCityLanguageScreen({ navigation }: Props) {
+function RegistrationDateOfBirthScreen({ navigation }: Props) {
   const [inputs, setInputs] = useState({
     dateOfBirth: {
       value: new Date(),
-      isValid: false,
-    },
-    city: {
-      value: '',
-      isValid: false,
-    },
-    language: {
-      value: null,
-      isValid: false,
+      isValid: true,
     },
   })
   const [submitted, setSubmitted] = useState(false)
@@ -37,11 +27,8 @@ function RegistrationDateOfBirthCityLanguageScreen({ navigation }: Props) {
         case 'dateOfBirth':
           isValid = false
           break
-        case 'city':
-          isValid = false
-          break
         default:
-          isValid: true
+          break
       }
 
       return {
@@ -58,31 +45,18 @@ function RegistrationDateOfBirthCityLanguageScreen({ navigation }: Props) {
     setSubmitted(true)
     if (!formValid()) return
 
-    navigation.navigate('WelcomeScreen')
+    navigation.navigate('RegistrationPersonalDataScreen')
   }
 
   function formValid() {
-    return (
-      inputs.dateOfBirth.isValid &&
-      inputs.city.isValid &&
-      inputs.language.isValid
-    )
+    return inputs.dateOfBirth.isValid
   }
 
   return (
     <RegistrationContainer onNext={nextHandler} nextDisabled={!formValid()}>
-      <Input
-        label="Stadt"
-        invalid={inputs.city.isValid ? null : 'Gib eine Stadt ein'}
-        submitted={submitted}
-        textInputConfig={{
-          value: inputs.city.value,
-          onChangeText: (city: string) => inputChangedHandler('city', city),
-          autoCorrect: false,
-        }}
-      />
+      <Text>TBD</Text>
     </RegistrationContainer>
   )
 }
 
-export default RegistrationDateOfBirthCityLanguageScreen
+export default RegistrationDateOfBirthScreen

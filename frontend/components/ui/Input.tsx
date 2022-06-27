@@ -8,6 +8,8 @@ import {
   ViewStyle,
 } from 'react-native'
 import { GlobalStyles } from '../../constants/style'
+import ErrorLabel from './StartScreens/Registration/ErrorLabel'
+import InputLabel from './StartScreens/Registration/InputLabel'
 
 export type Props = {
   label: string
@@ -23,13 +25,13 @@ function Input({ label, textInputConfig, style, invalid, submitted }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      <InputLabel>{label}</InputLabel>
       <TextInput
         style={[styles.textInput, showError && styles.invalid]}
         {...textInputConfig}
         onBlur={() => setDirty(true)}
       />
-      {showError && <Text style={styles.errorLabel}>{invalid}</Text>}
+      {showError && <ErrorLabel>{invalid}</ErrorLabel>}
     </View>
   )
 }
@@ -40,15 +42,12 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 8,
   },
-  label: {
-    marginBottom: 4,
-    fontFamily: 'Nunito_700Bold',
-  },
+
   textInput: {
     fontSize: 16,
     fontFamily: 'Nunito_400Regular',
     backgroundColor: 'white',
-    paddingVertical: 8,
+    paddingVertical: 6,
     paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: '#ccc',

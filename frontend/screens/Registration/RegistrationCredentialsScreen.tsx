@@ -54,7 +54,7 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
     setSubmitted(true)
     if (!formValid()) return
 
-    navigation.navigate('RegistrationNameGenderScreen')
+    navigation.navigate('WelcomeScreen')
   }
 
   function formValid() {

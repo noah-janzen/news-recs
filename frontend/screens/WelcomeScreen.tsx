@@ -16,7 +16,7 @@ function WelcomeScreen({ navigation }: Props) {
   }
 
   function registerClickHandler() {
-    navigation.navigate('RegistrationCredentialsScreen')
+    navigation.navigate('RegistrationDateOfBirthScreen')
   }
 
   return (

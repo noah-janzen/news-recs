@@ -38,3 +38,7 @@ export function firstNameValid(firstName: string) {
 export function lastNameValid(lastName: string) {
   return lastName.trim().length >= 1
 }
+
+export function cityValid(city: string) {
+  return city.trim().length >= 3
+}
