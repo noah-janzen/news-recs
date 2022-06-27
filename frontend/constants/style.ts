@@ -1,15 +1,22 @@
 export const GlobalStyles = {
   colors: {
-    primary100: '#5B8BB0',
-    primary200: '#386C95',
-    primary300: '#1E5987',
-    primary400: '#114369',
-    primary500: '#042C4A',
+    bgTop: '#def6ff',
+    bgBottom: '#f3fcff',
 
-    secondary100: '#FFC77B',
-    secondary200: '#E7A54D',
-    secondary300: '#D28723',
-    secondary400: '#A36511',
-    secondary500: '#734200',
+    primary50: '#97DFFC',
+    primary100: '#93CAF6',
+    primary200: '#8EB5F0',
+    primary300: '#858AE3',
+    primary400: '#7364D2',
+    primary500: '#613DC1',
+    primary160: '#5829A7',
+    primary700: '#4E148C',
+    primary800: '#461177',
+    primary900: '#3D0E61',
+    primary950: '#1a032c',
+
+    success: '#16a085',
+    error: '#c0392b',
+    errorLight: '#fff7f6',
   },
 }
