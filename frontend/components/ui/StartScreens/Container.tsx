@@ -15,20 +15,15 @@ function Container({ children, justifyContent }: Props) {
       colors={[GlobalStyles.colors.bgTop, GlobalStyles.colors.bgBottom]}
       style={styles.outerContainer}
     >
-      <ScrollView>
-        <SafeAreaView
-          style={[
-            AndroidSafeArea.AndroidSafeArea,
-            { flex: 1, paddingBottom: 32 },
-          ]}
+      {/* <ScrollView contentContainerStyle={{ flexGrow: 1 }}> */}
+      <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
+        <View
+          style={[styles.innerContainer, { justifyContent: justifyContent }]}
         >
-          <View
-            style={[styles.innerContainer, { justifyContent: justifyContent }]}
-          >
-            {children}
-          </View>
-        </SafeAreaView>
-      </ScrollView>
+          {children}
+        </View>
+      </SafeAreaView>
+      {/* </ScrollView> */}
     </LinearGradient>
   )
 }

@@ -1,0 +1,14 @@
+[
+  {
+    "label": "männlich",
+    "id": "M"
+  },
+  {
+    "label": "weiblich",
+    "id": "W"
+  },
+  {
+    "label": "divers",
+    "id": "D"
+  }
+]

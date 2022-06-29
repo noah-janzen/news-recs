@@ -1,15 +1,9 @@
 import { useState } from 'react'
-import {
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ViewStyle,
-} from 'react-native'
-import { GlobalStyles } from '../../constants/style'
-import ErrorLabel from './StartScreens/Registration/ErrorLabel'
-import InputLabel from './StartScreens/Registration/InputLabel'
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+
+import ErrorLabel from './ErrorLabel'
+import InputControl from './InputControl'
+import InputLabel from './InputLabel'
 
 export type Props = {
   label: string
@@ -20,16 +14,16 @@ export type Props = {
 }
 
 function Input({ label, textInputConfig, style, invalid, submitted }: Props) {
-  const [dirty, setDirty] = useState(false)
-  const showError = invalid && (dirty || submitted)
+  const [touched, setTouched] = useState(false)
+  const showError: boolean = invalid != null && (touched || !!submitted)
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <InputLabel>{label}</InputLabel>
-      <TextInput
-        style={[styles.textInput, showError && styles.invalid]}
-        {...textInputConfig}
-        onBlur={() => setDirty(true)}
+      <InputControl
+        showError={showError}
+        textInputConfig={textInputConfig}
+        onBlur={() => setTouched(true)}
       />
       {showError && <ErrorLabel>{invalid}</ErrorLabel>}
     </View>
@@ -41,25 +35,5 @@ export default Input
 const styles = StyleSheet.create({
   container: {
     marginVertical: 8,
-  },
-
-  textInput: {
-    fontSize: 16,
-    fontFamily: 'Nunito_400Regular',
-    backgroundColor: 'white',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-  },
-  invalid: {
-    borderColor: GlobalStyles.colors.error,
-    backgroundColor: GlobalStyles.colors.errorLight,
-    color: GlobalStyles.colors.error,
-  },
-  errorLabel: {
-    color: GlobalStyles.colors.error,
-    marginTop: 4,
   },
 })

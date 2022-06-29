@@ -1,15 +1,10 @@
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { useState } from 'react'
-import Input from '../../components/ui/Input'
-import PasswordValidContainer from '../../components/ui/StartScreens/Registration/PasswordValidContainer'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
+import { emailValid, passwordValid } from '../../util/Validation'
 import RegistrationContainer from '../../components/ui/StartScreens/RegistrationContainer'
-import {
-  emailValid,
-  passwordContainsRequiredCharacters,
-  passwordLengthValid,
-  passwordValid,
-} from '../../util/Validation'
+import InputControl from '../../components/ui/Input'
+import PasswordValidContainer from '../../components/ui/StartScreens/Registration/PasswordValidContainer'
 
 export type Props = {
   navigation: NavigationProp<ParamListBase>
@@ -28,17 +23,13 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
   })
   const [submitted, setSubmitted] = useState(false)
 
-  function inputChangedHandler(inputIdentifier: string, enteredValue: string) {
+  function inputChangedHandler(
+    inputIdentifier: string,
+    enteredValue: string,
+    validator: (enteredValue: string) => boolean
+  ) {
     setInputs((currentInputs) => {
-      let isValid
-      switch (inputIdentifier) {
-        case 'email':
-          isValid = emailValid(enteredValue)
-          break
-        case 'password':
-          isValid = passwordValid(enteredValue)
-          break
-      }
+      const isValid = validator(enteredValue)
 
       return {
         ...currentInputs,
@@ -62,8 +53,12 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
   }
 
   return (
-    <RegistrationContainer onNext={nextHandler} nextDisabled={!formValid()}>
-      <Input
+    <RegistrationContainer
+      onNext={nextHandler}
+      nextLabel="Registrieren"
+      nextDisabled={!formValid()}
+    >
+      <InputControl
         label="E-Mail"
         invalid={
           inputs.email.isValid ? null : 'Gib eine gültige E-Mail-Adresse ein'
@@ -71,13 +66,14 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
         submitted={submitted}
         textInputConfig={{
           value: inputs.email.value,
-          onChangeText: (email: string) => inputChangedHandler('email', email),
+          onChangeText: (email: string) =>
+            inputChangedHandler('email', email, emailValid),
           keyboardType: 'email-address',
           autoCapitalize: 'none',
           autoCorrect: false,
         }}
       />
-      <Input
+      <InputControl
         label="Passwort"
         invalid={
           inputs.password.isValid
@@ -88,18 +84,13 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
         textInputConfig={{
           value: inputs.password.value,
           onChangeText: (password: string) =>
-            inputChangedHandler('password', password),
+            inputChangedHandler('password', password, passwordValid),
           autoCapitalize: 'none',
           autoCorrect: false,
           secureTextEntry: true,
         }}
       />
-      <PasswordValidContainer
-        passwordLengthValid={passwordLengthValid(inputs.password.value)}
-        passwordContainsRequiredCharacters={passwordContainsRequiredCharacters(
-          inputs.password.value
-        )}
-      />
+      <PasswordValidContainer password={inputs.password.value} />
     </RegistrationContainer>
   )
 }

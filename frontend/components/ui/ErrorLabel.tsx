@@ -1,6 +1,6 @@
 import { StyleSheet, Text } from 'react-native'
 
-import { GlobalStyles } from '../../../../constants/style'
+import { GlobalStyles } from '../../constants/style'
 
 export type Props = {
   children: React.ReactNode

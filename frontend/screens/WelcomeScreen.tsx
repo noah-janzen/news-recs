@@ -21,13 +21,17 @@ function WelcomeScreen({ navigation }: Props) {
 
   return (
     <Container justifyContent="flex-end">
-      <View style={{ marginTop: 48 }}>
+      <View style={styles.introContainer}>
         <Title>Willkommen bei NewsRecs</Title>
         <IntroText />
       </View>
 
       <View style={styles.buttonsContainer}>
-        <Button onPress={registerClickHandler} style={styles.topButton} outline>
+        <Button
+          onPress={registerClickHandler}
+          style={styles.registerButton}
+          outline
+        >
           Registrieren
         </Button>
         <Button onPress={loginClickHandler}>Anmelden</Button>
@@ -39,10 +43,14 @@ function WelcomeScreen({ navigation }: Props) {
 export default WelcomeScreen
 
 const styles = StyleSheet.create({
-  buttonsContainer: {
+  introContainer: {
     marginTop: 48,
   },
-  topButton: {
+  buttonsContainer: {
+    marginTop: 48,
+    marginBottom: 12,
+  },
+  registerButton: {
     marginBottom: 12,
   },
 })

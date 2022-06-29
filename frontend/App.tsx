@@ -38,38 +38,53 @@ import LoginScreen from './screens/LoginScreen'
 import AppLoading from './screens/AppLoading'
 import RegistrationCredentialsScreen from './screens/Registration/RegistrationCredentialsScreen'
 import RegistrationPersonalDataScreen from './screens/Registration/RegistrationPersonalDataScreen'
-import RegistrationDateOfBirthScreen from './screens/Registration/RegistrationDateOfBirthScreen'
+import RegistrationLanguageScreen from './screens/Registration/RegistrationLanguage'
+import { GlobalStyles } from './constants/style'
 
 const Stack = createNativeStackNavigator()
 
 function StartScreensStack() {
+  const registrationHeaderOptions = {
+    animation: 'slide_from_right',
+    title: 'Registrieren',
+    headerTintColor: GlobalStyles.colors.primary900,
+    headerBackTitleVisible: false,
+    headerStyle: { backgroundColor: GlobalStyles.colors.bgTop },
+    headerShadowVisible: false,
+    // headerTransparent: true,
+    headerTitleStyle: {
+      fontFamily: 'EncodeSans_700Bold',
+    },
+  }
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="WelcomeScreen"
+        component={WelcomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen
         name="RegistrationCredentialsScreen"
         component={RegistrationCredentialsScreen}
         options={{
-          animation: 'slide_from_right',
+          ...registrationHeaderOptions,
         }}
       />
       <Stack.Screen
         name="RegistrationPersonalDataScreen"
         component={RegistrationPersonalDataScreen}
         options={{
-          animation: 'slide_from_right',
+          ...registrationHeaderOptions,
         }}
       />
       <Stack.Screen
         name="RegistrationDateOfBirthScreen"
-        component={RegistrationDateOfBirthScreen}
+        component={RegistrationLanguageScreen}
         options={{
-          animation: 'slide_from_right',
+          ...registrationHeaderOptions,
         }}
       />
     </Stack.Navigator>

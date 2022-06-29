@@ -1,5 +1,5 @@
 import { Pressable, View, Text, StyleSheet } from 'react-native'
-import { GlobalStyles } from '../../../../constants/style'
+import { GlobalStyles } from '../../constants/style'
 import ErrorLabel from './ErrorLabel'
 import InputLabel from './InputLabel'
 
@@ -83,17 +83,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    flex: 1,
-    width: '100%',
   },
   pressable: {
+    height: 40,
     flex: 1,
   },
   selectItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 40,
     borderRadius: 8,
     borderColor: '#ccc',
     backgroundColor: 'white',

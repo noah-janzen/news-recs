@@ -1,26 +1,27 @@
 import { StyleSheet, Text, View } from 'react-native'
+
+import {
+  passwordContainsRequiredCharacters,
+  passwordLengthValid,
+} from '../../../../util/Validation'
 import PasswordRequirementItem from './PasswordRequirementItem'
 
 export type Props = {
-  passwordLengthValid: boolean
-  passwordContainsRequiredCharacters: boolean
+  password: string
 }
 
-function PasswordValidContainer({
-  passwordLengthValid,
-  passwordContainsRequiredCharacters,
-}: Props) {
+function PasswordValidContainer({ password }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.description}>
         Dein Passwort muss Folgendes haben:
       </Text>
       <PasswordRequirementItem
-        isValid={passwordLengthValid}
+        isValid={passwordLengthValid(password)}
         label="8 bis 20 Zeichen"
       />
       <PasswordRequirementItem
-        isValid={passwordContainsRequiredCharacters}
+        isValid={passwordContainsRequiredCharacters(password)}
         label="Buchstaben, Ziffern und Sonderzeichen"
       />
     </View>
