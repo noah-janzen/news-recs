@@ -1,44 +1,34 @@
 import { useState } from 'react'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { emailValid, passwordValid } from '../../util/Validation'
-import RegistrationContainer from '../../components/ui/StartScreens/RegistrationContainer'
+import { StoreReducer } from '../../store/store'
+import { setValue } from '../../store/registrationSlice'
 import InputControl from '../../components/ui/Input'
 import PasswordValidContainer from '../../components/ui/StartScreens/Registration/PasswordValidContainer'
+import RegistrationContainer from '../../components/ui/StartScreens/RegistrationContainer'
 
 export type Props = {
   navigation: NavigationProp<ParamListBase>
 }
 
 function RegistrationCredentialsScreen({ navigation }: Props) {
-  const [inputs, setInputs] = useState({
-    email: {
-      value: '',
-      isValid: false,
-    },
-    password: {
-      value: '',
-      isValid: false,
-    },
-  })
   const [submitted, setSubmitted] = useState(false)
+  const dispatch = useDispatch()
 
-  function inputChangedHandler(
-    inputIdentifier: string,
-    enteredValue: string,
-    validator: (enteredValue: string) => boolean
-  ) {
-    setInputs((currentInputs) => {
-      const isValid = validator(enteredValue)
+  const email = useSelector((state: StoreReducer) => state.registration.email)
+  const password = useSelector(
+    (state: StoreReducer) => state.registration.password
+  )
 
-      return {
-        ...currentInputs,
-        [inputIdentifier]: {
-          value: enteredValue,
-          isValid: isValid,
-        },
-      }
-    })
+  function inputChangedHandler(inputIdentifier: string, enteredValue: string) {
+    dispatch(
+      setValue({
+        identifier: inputIdentifier,
+        value: enteredValue,
+      })
+    )
   }
 
   function nextHandler() {
@@ -49,7 +39,7 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
   }
 
   function formValid() {
-    return inputs.email.isValid && inputs.password.isValid
+    return emailValid(email) && passwordValid(password)
   }
 
   return (
@@ -61,13 +51,12 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
       <InputControl
         label="E-Mail"
         invalid={
-          inputs.email.isValid ? null : 'Gib eine gültige E-Mail-Adresse ein'
+          emailValid(email) ? null : 'Gib eine gültige E-Mail-Adresse ein'
         }
         submitted={submitted}
         textInputConfig={{
-          value: inputs.email.value,
-          onChangeText: (email: string) =>
-            inputChangedHandler('email', email, emailValid),
+          value: email,
+          onChangeText: (email: string) => inputChangedHandler('email', email),
           keyboardType: 'email-address',
           autoCapitalize: 'none',
           autoCorrect: false,
@@ -76,21 +65,21 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
       <InputControl
         label="Passwort"
         invalid={
-          inputs.password.isValid
+          passwordValid(password)
             ? null
             : 'Das Passwort muss alle Anforderungen erfüllen'
         }
         submitted={submitted}
         textInputConfig={{
-          value: inputs.password.value,
+          value: password,
           onChangeText: (password: string) =>
-            inputChangedHandler('password', password, passwordValid),
+            inputChangedHandler('password', password),
           autoCapitalize: 'none',
           autoCorrect: false,
           secureTextEntry: true,
         }}
       />
-      <PasswordValidContainer password={inputs.password.value} />
+      <PasswordValidContainer password={password} />
     </RegistrationContainer>
   )
 }

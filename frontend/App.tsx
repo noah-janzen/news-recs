@@ -1,6 +1,9 @@
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { Provider } from 'react-redux'
+
+import { store } from './store/store'
 
 import {
   useFonts,
@@ -38,7 +41,7 @@ import LoginScreen from './screens/LoginScreen'
 import AppLoading from './screens/AppLoading'
 import RegistrationCredentialsScreen from './screens/Registration/RegistrationCredentialsScreen'
 import RegistrationPersonalDataScreen from './screens/Registration/RegistrationPersonalDataScreen'
-import RegistrationLanguageScreen from './screens/Registration/RegistrationLanguage'
+import RegistrationLanguageScreen from './screens/Registration/RegistrationLanguageScreen'
 import { GlobalStyles } from './constants/style'
 
 const Stack = createNativeStackNavigator()
@@ -134,8 +137,10 @@ export default function App() {
 
   return (
     <>
-      <Navigation />
       <StatusBar style="auto" />
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
     </>
   )
 }

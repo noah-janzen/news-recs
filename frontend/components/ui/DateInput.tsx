@@ -1,34 +1,41 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { parseDate } from '../../util/Date'
 import { dayValid, monthValid, yearValid } from '../../util/Validation'
 import InputLabel from './InputLabel'
 import InputControl from './InputControl'
 import ErrorLabel from './ErrorLabel'
+import { DateEntered } from '../../model/DateEntered'
 
 export type Props = {
   label: string
+  initialDate: DateEntered
+  onDateChanged: (date: DateEntered) => void
   submitted: boolean
   invalid: string | null
-  onDateChanged: (date: Date) => void
 }
 
-function DateInput({ label, submitted, invalid, onDateChanged }: Props) {
+function DateInput({
+  label,
+  initialDate,
+  onDateChanged,
+  submitted,
+  invalid,
+}: Props) {
   const [inputs, setInputs] = useState({
     day: {
-      value: '',
-      isValid: false,
+      value: initialDate.day,
+      isValid: dayValid(initialDate.day),
       isTouched: false,
     },
     month: {
-      value: '',
-      isValid: false,
+      value: initialDate.month,
+      isValid: monthValid(initialDate.month),
       isTouched: false,
     },
     year: {
-      value: '',
-      isValid: false,
+      value: initialDate.year,
+      isValid: yearValid(initialDate.year),
       isTouched: false,
     },
   })
@@ -50,12 +57,12 @@ function DateInput({ label, submitted, invalid, onDateChanged }: Props) {
   }
 
   useEffect(() => {
-    const date = parseDate(
-      inputs.year.value,
-      inputs.month.value,
-      inputs.day.value
-    )
-    onDateChanged(date)
+    const dateInput = {
+      day: inputs.day.value,
+      month: inputs.month.value,
+      year: inputs.year.value,
+    }
+    onDateChanged(dateInput)
   }, [inputs])
 
   return (

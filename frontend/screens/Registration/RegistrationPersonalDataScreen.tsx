@@ -1,55 +1,36 @@
 import { useState } from 'react'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
 
-import SEXES from '../../util/sexes.json'
-import { Gender } from '../../model/Gender'
-import { registrationDateValid } from '../../util/Validation'
+import { DateEntered } from '../../model/DateEntered'
+import GENDERS from '../../util/genders.json'
+import { genderValid, registrationDateValid } from '../../util/Validation'
+import { StoreReducer } from '../../store/store'
+import { setValue } from '../../store/registrationSlice'
 import ButtonInput from '../../components/ui/ButtonInput'
-import DateInput from '../../components/ui/DateInput'
 import RegistrationContainer from '../../components/ui/StartScreens/RegistrationContainer'
+import DateInput from '../../components/ui/DateInput'
 
 export type Props = {
   navigation: NavigationProp<ParamListBase>
 }
 
 function RegistrationPersonalDataScreen({ navigation }: Props) {
-  const [inputs, setInputs] = useState<{
-    dateOfBirth: {
-      value: null | Date
-      isValid: boolean
-    }
-    gender: {
-      value: null | Gender
-      isValid: boolean
-    }
-  }>({
-    dateOfBirth: {
-      value: null,
-      isValid: false,
-    },
-    gender: {
-      value: null,
-      isValid: false,
-    },
-  })
   const [submitted, setSubmitted] = useState(false)
+  const dispatch = useDispatch()
 
-  function inputChangedHandler(
-    inputIdentifier: string,
-    enteredValue: any,
-    validator: (enteredValue: any) => boolean
-  ) {
-    setInputs((currentInputs) => {
-      const isValid = validator(enteredValue)
+  const dateOfBirth = useSelector(
+    (state: StoreReducer) => state.registration.dateOfBirth
+  )
+  const gender = useSelector((state: StoreReducer) => state.registration.gender)
 
-      return {
-        ...currentInputs,
-        [inputIdentifier]: {
-          value: enteredValue,
-          isValid: isValid,
-        },
-      }
-    })
+  function inputChangedHandler(inputIdentifier: string, enteredValue: any) {
+    dispatch(
+      setValue({
+        identifier: inputIdentifier,
+        value: enteredValue,
+      })
+    )
   }
 
   function nextHandler() {
@@ -60,33 +41,32 @@ function RegistrationPersonalDataScreen({ navigation }: Props) {
   }
 
   function formValid() {
-    return inputs.dateOfBirth.isValid && inputs.gender.isValid
+    return registrationDateValid(dateOfBirth) && genderValid(gender)
   }
 
   return (
     <RegistrationContainer onNext={nextHandler} nextDisabled={!formValid()}>
       <DateInput
         label="Geburtsdatum"
+        onDateChanged={(date: DateEntered) =>
+          inputChangedHandler('dateOfBirth', date)
+        }
+        initialDate={dateOfBirth}
         invalid={
-          inputs.dateOfBirth.isValid
+          registrationDateValid(dateOfBirth)
             ? null
             : 'Gib ein gültiges Geburtsdatum ein. Du musst mindest 18 Jahre alt sein.'
         }
         submitted={submitted}
-        onDateChanged={(dateOfBirth: Date) =>
-          inputChangedHandler('dateOfBirth', dateOfBirth, registrationDateValid)
-        }
       />
 
       <ButtonInput
         label="Geschlecht"
         submitted={submitted}
-        onSelect={(gender: string) =>
-          inputChangedHandler('gender', gender, (gender) => true)
-        }
-        activeElement={inputs.gender.value}
+        onSelect={(gender: string) => inputChangedHandler('gender', gender)}
+        activeElement={gender}
         errorLabel="Gib ein Geschlecht an"
-        items={SEXES}
+        items={GENDERS}
       />
     </RegistrationContainer>
   )

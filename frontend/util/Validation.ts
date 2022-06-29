@@ -1,4 +1,13 @@
+import { DateEntered } from '../model/DateEntered'
 import { parseDate } from './Date'
+
+export function languageValid(language: string | null) {
+  return !!language
+}
+
+export function genderValid(gender: string | null) {
+  return !!gender
+}
 
 export function emailValid(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
@@ -63,10 +72,13 @@ export function yearValid(year: string) {
   return yearNumber >= 1900 && yearNumber <= new Date().getFullYear()
 }
 
-export function registrationDateValid(registrationDate: Date) {
-  if (!registrationDate || registrationDate?.toString() === 'Invalid Date') {
-    return false
-  }
+export function dateValid(date: Date) {
+  return date.toString() === 'Invalid Date' ? false : true
+}
+
+export function registrationDateValid(registrationDate: DateEntered) {
+  const parsedDate = parseDate(registrationDate)
+  if (!dateValid(parsedDate)) return false
 
   const now = new Date()
 
@@ -76,15 +88,13 @@ export function registrationDateValid(registrationDate: Date) {
   const maxAge = 99 // TODO: STORE IN CONSTANTS FILE
   const maxBirthdayDate = subtractYearsFromDate(now, maxAge)
 
-  return (
-    registrationDate < minBirthdayDate && registrationDate > maxBirthdayDate
-  )
+  return parsedDate < minBirthdayDate && parsedDate > maxBirthdayDate
 }
 
 function subtractYearsFromDate(date: Date, years: number) {
-  return parseDate(
-    (date.getFullYear() - years).toString(),
-    (date.getMonth() + 1).toString(),
-    date.getDate().toString()
-  )
+  const year = (date.getFullYear() - years).toString()
+  const month = (date.getMonth() + 1).toString()
+  const day = date.getDate().toString()
+
+  return parseDate({ year, month, day })
 }
