@@ -11,34 +11,25 @@ export class MailService {
   ) {}
 
   async sendUserConfirmation(user: User) {
-    const confirmationLink = new URL(
-      this.configService.get<string>('CONFIRMATION_LINK_HOST') +
-        '/auth/confirm',
-    );
-    confirmationLink.searchParams.set('userId', user.id);
-    confirmationLink.searchParams.set('token', user.confirmationToken);
-
     await this.mailerService.sendMail({
       to: user.email,
       subject: this.configService.get<string>('CONFIRMATION_MAIL_SUBJECT'),
       template: 'confirmation.hbs',
       context: {
-        name: user.firstName,
-        confirmationLink: confirmationLink.toString(),
+        confirmationToken: user.confirmationToken,
       },
     });
   }
 
-  async sendUserPasswordResetToken(user: User) {
+  async sendUserChangePasswordToken(user: User) {
     await this.mailerService.sendMail({
       to: user.email,
       subject: this.configService.get<string>(
-        'PASSWORD_RESET_TOKEN_MAIL_SUBJECT',
+        'CHANGE_PASSWORD_TOKEN_MAIL_SUBJECT',
       ),
-      template: 'password-reset-token.hbs',
+      template: 'change-password-token.hbs',
       context: {
-        name: user.firstName,
-        passwordResetToken: user.passwordResetToken,
+        changePasswordToken: user.changePasswordToken,
       },
     });
   }

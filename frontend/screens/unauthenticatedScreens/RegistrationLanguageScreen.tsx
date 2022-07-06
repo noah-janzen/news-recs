@@ -3,7 +3,7 @@ import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import LANGUAGES from '../../util/languages.json'
-import RegistrationContainer from '../../components/ui/StartScreens/RegistrationContainer'
+import ExpiryContainer from '../../components/ui/ExpiryContainer'
 import ButtonInput from '../../components/ui/ButtonInput'
 import { setValue } from '../../store/registrationSlice'
 import { StoreReducer } from '../../store/store'
@@ -33,7 +33,7 @@ function RegistrationLanguageScreen({ navigation }: Props) {
   }
 
   return (
-    <RegistrationContainer
+    <ExpiryContainer
       onNext={nextHandler}
       nextLabel="Weiter"
       nextDisabled={!languageValid(selectedLanguage)}
@@ -46,7 +46,7 @@ function RegistrationLanguageScreen({ navigation }: Props) {
         errorLabel="Gib eine Sprache an"
         items={LANGUAGES}
       />
-    </RegistrationContainer>
+    </ExpiryContainer>
   )
 }
 

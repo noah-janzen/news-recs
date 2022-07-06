@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 
-import { store } from './store/store'
+import { store, StoreReducer } from './store/store'
 
 import {
   useFonts,
@@ -36,17 +36,21 @@ import {
   EncodeSans_900Black,
 } from '@expo-google-fonts/encode-sans'
 
-import WelcomeScreen from './screens/WelcomeScreen'
-import LoginScreen from './screens/LoginScreen'
-import AppLoading from './screens/AppLoading'
-import RegistrationCredentialsScreen from './screens/Registration/RegistrationCredentialsScreen'
-import RegistrationPersonalDataScreen from './screens/Registration/RegistrationPersonalDataScreen'
-import RegistrationLanguageScreen from './screens/Registration/RegistrationLanguageScreen'
+import WelcomeScreen from './screens/unauthenticatedScreens/WelcomeScreen'
+import LoginScreen from './screens/unauthenticatedScreens/LoginScreen'
+import AppLoading from './screens/unauthenticatedScreens/AppLoading'
+import RegistrationCredentialsScreen from './screens/unauthenticatedScreens/RegistrationCredentialsScreen'
+import RegistrationPersonalDataScreen from './screens/unauthenticatedScreens/RegistrationPersonalDataScreen'
+import RegistrationLanguageScreen from './screens/unauthenticatedScreens/RegistrationLanguageScreen'
 import { GlobalStyles } from './constants/style'
+import ConfirmAccountScreen from './screens/unauthenticatedScreens/ConfirmAccountScreen'
+import NewsFeed from './screens/authenticatedScreens/NewsFeed'
+import ForgotPasswordScreen from './screens/unauthenticatedScreens/ForgotPasswordScreen'
+import ChangePasswordScreen from './screens/unauthenticatedScreens/ChangePasswordScreen'
 
 const Stack = createNativeStackNavigator()
 
-function StartScreensStack() {
+function AuthStack() {
   const registrationHeaderOptions = {
     animation: 'slide_from_right',
     title: 'Registrieren',
@@ -54,11 +58,11 @@ function StartScreensStack() {
     headerBackTitleVisible: false,
     headerStyle: { backgroundColor: GlobalStyles.colors.bgTop },
     headerShadowVisible: false,
-    // headerTransparent: true,
     headerTitleStyle: {
       fontFamily: 'EncodeSans_700Bold',
     },
   }
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -68,10 +72,24 @@ function StartScreensStack() {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen
-        name="RegistrationCredentialsScreen"
-        component={RegistrationCredentialsScreen}
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{ ...registrationHeaderOptions, title: 'Anmelden' }}
+      />
+      <Stack.Screen
+        name="ForgotPasswordScreen"
+        component={ForgotPasswordScreen}
+        options={{ ...registrationHeaderOptions, title: 'Passwort vergessen' }}
+      />
+      <Stack.Screen
+        name="ChangePasswordScreen"
+        component={ChangePasswordScreen}
+        options={{ ...registrationHeaderOptions, title: 'Passwort vergessen' }}
+      />
+      <Stack.Screen
+        name="RegistrationLanguageScreen"
+        component={RegistrationLanguageScreen}
         options={{
           ...registrationHeaderOptions,
         }}
@@ -84,20 +102,41 @@ function StartScreensStack() {
         }}
       />
       <Stack.Screen
-        name="RegistrationDateOfBirthScreen"
-        component={RegistrationLanguageScreen}
+        name="RegistrationCredentialsScreen"
+        component={RegistrationCredentialsScreen}
         options={{
           ...registrationHeaderOptions,
+        }}
+      />
+      <Stack.Screen
+        name="ConfirmAccountScreen"
+        component={ConfirmAccountScreen}
+        options={{
+          ...registrationHeaderOptions,
+          title: 'Konto bestätigen',
         }}
       />
     </Stack.Navigator>
   )
 }
 
+function AuthenticatedStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="NewsFeedScreen" component={NewsFeed} />
+    </Stack.Navigator>
+  )
+}
+
 function Navigation() {
+  const isAuthenticated = useSelector(
+    (state: StoreReducer) => !!state.auth.access_token
+  )
+  console.log(useSelector((state: StoreReducer) => state.auth))
+
   return (
     <NavigationContainer>
-      <StartScreensStack />
+      {isAuthenticated ? <AuthenticatedStack /> : <AuthStack />}
     </NavigationContainer>
   )
 }

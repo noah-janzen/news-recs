@@ -46,16 +46,26 @@ export class UsersService {
 
   /**
    * Confirms an user
-   * @param userId of the user to be confirmed
+   * @param email of the user to be confirmed
    */
-  async confirm(userId: string) {
-    const user = await this.userModel.findById(userId).exec();
+  async confirm(email: string) {
+    const user = await this.findOne(email);
 
     user.isConfirmed = true;
     user.confirmationToken = undefined;
     user.confirmationTokenTimestamp = undefined;
 
     await user.save();
+  }
+
+  async renewConfirmationToken(userId: string) {
+    const user = await this.findById(userId);
+
+    user.confirmationToken = this.generateToken();
+    user.confirmationTokenTimestamp = new Date();
+    user.save();
+
+    return user.confirmationToken;
   }
 
   /**
@@ -78,12 +88,12 @@ export class UsersService {
   }
 
   /**
-   * Creates a password reset token and stores it with its timestmap in the database
+   * Creates a change password token and stores it with its timestamp in the database
    * @param user to create the token for
    */
-  async createPasswordResetToken(user: UserDocument) {
-    user.passwordResetToken = this.generatePasswordResetToken();
-    user.passwordResetTokenTimestamp = new Date();
+  async createChangePasswordToken(user: UserDocument) {
+    user.changePasswordToken = this.generateToken();
+    user.changePasswordTokenTimestamp = new Date();
     await user.save();
   }
 
@@ -98,20 +108,25 @@ export class UsersService {
   }
 
   /**
-   * Deletes the password reset token and its timestamp from the database.
+   * Deletes the change password token and its timestamp from the database.
    * @param user to delete the token for
    */
-  async deletePasswordResetToken(user: UserDocument) {
-    user.passwordResetToken = undefined;
-    user.passwordResetTokenTimestamp = undefined;
+  async deleteChangePasswordToken(user: UserDocument) {
+    user.changePasswordToken = undefined;
+    user.changePasswordTokenTimestamp = undefined;
     await user.save();
   }
 
   /**
-   * Helper method to generate a password reset token
-   * @returns generated password reset token
+   * Helper method to generate a token
+   * @returns generated token
    */
-  private generatePasswordResetToken() {
-    return Math.floor(100_000 + Math.random() * 900_000);
+  generateToken(digits = 6) {
+    let randomNumber = 0;
+    do {
+      randomNumber = Math.floor(Math.random() * 10 ** digits);
+    } while (randomNumber < 10 ** (digits - 1));
+
+    return randomNumber.toString();
   }
 }

@@ -1,10 +1,10 @@
 import { StyleSheet, View } from 'react-native'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
-import Button from '../components/ui/Button'
-import Title from '../components/ui/Title'
-import Container from '../components/ui/StartScreens/Container'
-import IntroText from '../components/ui/StartScreens/IntroText'
+import Button from '../../components/ui/Button'
+import Title from '../../components/ui/Title'
+import Container from '../../components/ui/Container'
+import IntroText from '../../components/unauthenticated/IntroText'
 
 export type Props = {
   navigation: NavigationProp<ParamListBase>
@@ -16,7 +16,7 @@ function WelcomeScreen({ navigation }: Props) {
   }
 
   function registerClickHandler() {
-    navigation.navigate('RegistrationDateOfBirthScreen')
+    navigation.navigate('RegistrationLanguageScreen')
   }
 
   return (

@@ -1,11 +1,11 @@
 import { Text, View } from 'react-native'
 
-function LoginScreen() {
+function NewsFeed() {
   return (
     <View>
-      <Text>Login Screen</Text>
+      <Text>Authenticated</Text>
     </View>
   )
 }
 
-export default LoginScreen
+export default NewsFeed

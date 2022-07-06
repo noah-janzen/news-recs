@@ -98,3 +98,8 @@ function subtractYearsFromDate(date: Date, years: number) {
 
   return parseDate({ year, month, day })
 }
+
+export function tokenValid(token: string) {
+  // return /^\d{3}-\d{3}$/.test(token)
+  return /^\d{6}$/.test(token)
+}

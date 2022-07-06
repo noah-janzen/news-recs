@@ -1,8 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient'
 import { SafeAreaView, View, StyleSheet, ScrollView } from 'react-native'
 
-import AndroidSafeArea from '../../../constants/AndroidSafeArea'
-import { GlobalStyles } from '../../../constants/style'
+import AndroidSafeArea from '../../constants/AndroidSafeArea'
+import { GlobalStyles } from '../../constants/style'
 
 export type Props = {
   children: React.ReactNode

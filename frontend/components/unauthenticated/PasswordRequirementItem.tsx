@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
-import { GlobalStyles } from '../../../../constants/style'
+
+import { GlobalStyles } from '../../constants/style'
 
 export type Props = {
   label: string

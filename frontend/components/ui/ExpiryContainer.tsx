@@ -1,27 +1,29 @@
 import { StyleSheet, View } from 'react-native'
 
-import Button from '../../ui/Button'
-import Container from '../../ui/StartScreens/Container'
+import Button from '../ui/Button'
+import Container from './Container'
 
 export type Props = {
   onNext: () => void
   nextLabel?: string
   children: React.ReactNode
   nextDisabled?: boolean
+  loading?: boolean
 }
 
-function RegistrationContainer({
+function ExpiryContainer({
   onNext,
   nextLabel,
   children,
   nextDisabled,
+  loading,
 }: Props) {
   return (
     <Container justifyContent="flex-start">
       <View style={styles.childrenContainer}>{children}</View>
 
       <View style={styles.buttonContainer}>
-        <Button disabled={nextDisabled} onPress={onNext}>
+        <Button disabled={nextDisabled} onPress={onNext} isLoading={loading}>
           {nextLabel ?? 'Weiter'}
         </Button>
       </View>
@@ -29,7 +31,7 @@ function RegistrationContainer({
   )
 }
 
-export default RegistrationContainer
+export default ExpiryContainer
 
 const styles = StyleSheet.create({
   childrenContainer: {

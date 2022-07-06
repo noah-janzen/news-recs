@@ -18,9 +18,10 @@ import { RefreshTokenAuthGuard } from 'src/common/guards';
 import { AuthService } from './auth.service';
 import {
   CreateUserDto,
+  ConfirmUserDto,
   ForgotPasswordDto,
   LoginUserDto,
-  ResetPasswordDto,
+  ChangePasswordDto as ChangePasswordDto,
 } from './dto';
 import { Tokens } from './types';
 
@@ -32,21 +33,23 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() createUserDto: CreateUserDto) {
-    await this.authService.signUp(createUserDto);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...rest } = await this.authService.signUp(createUserDto);
+    return { userId: id };
   }
 
-  @Get('confirm')
+  @Post('confirm')
   @Public()
   @HttpCode(HttpStatus.OK)
-  confirm(@Query('userId') userId: string, @Query('token') token: string) {
-    return this.authService.confirm(userId, token);
+  confirm(@Body() confirmUserDto: ConfirmUserDto) {
+    return this.authService.confirm(confirmUserDto);
   }
 
-  @Post('resend-confirmation-link')
+  @Post('renew-confirmation-token')
   @Public()
   @HttpCode(HttpStatus.OK)
-  async resendConfirmationLink(@Body() loginUserDto: LoginUserDto) {
-    await this.authService.resendConfirmationLink(loginUserDto);
+  async renewConfirmationToken(@Body() loginUserDto: LoginUserDto) {
+    await this.authService.renewConfirmationToken(loginUserDto);
   }
 
   @Post('sign-in')
@@ -77,13 +80,13 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
-    await this.authService.sendPasswordResetToken(forgotPasswordDto.email);
+    await this.authService.sendChangePasswordToken(forgotPasswordDto.email);
   }
 
-  @Post('reset-password')
+  @Post('change-password')
   @Public()
   @HttpCode(HttpStatus.OK)
-  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    await this.authService.resetPassword(resetPasswordDto);
+  async changePassword(@Body() changePasswordDto: ChangePasswordDto) {
+    await this.authService.changePassword(changePasswordDto);
   }
 }

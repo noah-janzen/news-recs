@@ -3,11 +3,16 @@ import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { emailValid, passwordValid } from '../../util/Validation'
-import { StoreReducer } from '../../store/store'
+import { AppDispatch, StoreReducer } from '../../store/store'
 import { setValue } from '../../store/registrationSlice'
-import InputControl from '../../components/ui/Input'
-import PasswordValidContainer from '../../components/ui/StartScreens/Registration/PasswordValidContainer'
-import RegistrationContainer from '../../components/ui/StartScreens/RegistrationContainer'
+import Input from '../../components/ui/Input'
+import PasswordValidContainer from '../../components/unauthenticated/PasswordValidContainer'
+import ExpiryContainer from '../../components/ui/ExpiryContainer'
+import { store } from '../../store/store'
+import { CreateUserDto } from '../../model/dto/CreateUser.dto'
+import { parseDate } from '../../util/Date'
+import { Alert } from 'react-native'
+import { signUp } from '../../api/auth'
 
 export type Props = {
   navigation: NavigationProp<ParamListBase>
@@ -15,7 +20,9 @@ export type Props = {
 
 function RegistrationCredentialsScreen({ navigation }: Props) {
   const [submitted, setSubmitted] = useState(false)
-  const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const dispatch = useDispatch<AppDispatch>()
 
   const email = useSelector((state: StoreReducer) => state.registration.email)
   const password = useSelector(
@@ -31,11 +38,32 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
     )
   }
 
-  function nextHandler() {
+  async function nextHandler() {
     setSubmitted(true)
     if (!formValid()) return
 
-    navigation.navigate('WelcomeScreen')
+    setIsLoading(true)
+    const userInput = store.getState().registration
+    const user: CreateUserDto = {
+      ...userInput,
+      dateOfBirth: parseDate(userInput.dateOfBirth),
+      language: userInput.language!,
+      gender: userInput.gender!,
+    }
+    try {
+      await signUp(user)
+      setIsLoading(false)
+      navigation.navigate('ConfirmAccountScreen', { email, password })
+    } catch (error: any) {
+      const errorMessage = error.response.data.message
+      // check if errorMessage is array or a simple string
+      const alertMessage =
+        typeof errorMessage === 'string'
+          ? errorMessage
+          : errorMessage.join('. ')
+      Alert.alert('Fehler', alertMessage)
+      setIsLoading(false)
+    }
   }
 
   function formValid() {
@@ -43,12 +71,13 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
   }
 
   return (
-    <RegistrationContainer
+    <ExpiryContainer
       onNext={nextHandler}
       nextLabel="Registrieren"
       nextDisabled={!formValid()}
+      loading={isLoading}
     >
-      <InputControl
+      <Input
         label="E-Mail"
         invalid={
           emailValid(email) ? null : 'Gib eine gültige E-Mail-Adresse ein'
@@ -62,7 +91,7 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
           autoCorrect: false,
         }}
       />
-      <InputControl
+      <Input
         label="Passwort"
         invalid={
           passwordValid(password)
@@ -80,7 +109,7 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
         }}
       />
       <PasswordValidContainer password={password} />
-    </RegistrationContainer>
+    </ExpiryContainer>
   )
 }
 

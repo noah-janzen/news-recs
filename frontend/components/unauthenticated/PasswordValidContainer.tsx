@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import {
   passwordContainsRequiredCharacters,
   passwordLengthValid,
-} from '../../../../util/Validation'
+} from '../../util/Validation'
 import PasswordRequirementItem from './PasswordRequirementItem'
 
 export type Props = {

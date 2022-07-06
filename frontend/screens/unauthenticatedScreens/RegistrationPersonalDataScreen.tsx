@@ -8,7 +8,7 @@ import { genderValid, registrationDateValid } from '../../util/Validation'
 import { StoreReducer } from '../../store/store'
 import { setValue } from '../../store/registrationSlice'
 import ButtonInput from '../../components/ui/ButtonInput'
-import RegistrationContainer from '../../components/ui/StartScreens/RegistrationContainer'
+import ExpiryContainer from '../../components/ui/ExpiryContainer'
 import DateInput from '../../components/ui/DateInput'
 
 export type Props = {
@@ -45,7 +45,7 @@ function RegistrationPersonalDataScreen({ navigation }: Props) {
   }
 
   return (
-    <RegistrationContainer onNext={nextHandler} nextDisabled={!formValid()}>
+    <ExpiryContainer onNext={nextHandler} nextDisabled={!formValid()}>
       <DateInput
         label="Geburtsdatum"
         onDateChanged={(date: DateEntered) =>
@@ -68,7 +68,7 @@ function RegistrationPersonalDataScreen({ navigation }: Props) {
         errorLabel="Gib ein Geschlecht an"
         items={GENDERS}
       />
-    </RegistrationContainer>
+    </ExpiryContainer>
   )
 }
 

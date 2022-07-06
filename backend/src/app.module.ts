@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenAuthGuard } from './common/guards';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AccessTokenAuthGuard } from './common/guards';
     MailModule,
     UsersModule,
     AuthModule,
+    NewsModule,
   ],
   providers: [
     {

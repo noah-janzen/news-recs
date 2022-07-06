@@ -51,12 +51,6 @@ export class User {
   @Prop({ default: null })
   refreshToken: string;
 
-  @Prop({ required: true })
-  firstName: string;
-
-  @Prop({ required: true })
-  lastName: string;
-
   @Prop({
     required: true,
     type: String,
@@ -70,12 +64,6 @@ export class User {
   })
   dateOfBirth: Date;
 
-  @Prop({ required: true })
-  postalCode: string;
-
-  @Prop({ required: true })
-  city: string;
-
   @Prop({
     required: true,
     type: String,
@@ -84,10 +72,10 @@ export class User {
   language: Language;
 
   @Prop()
-  passwordResetToken: number;
+  changePasswordToken: string;
 
   @Prop({ type: Date })
-  passwordResetTokenTimestamp: Date;
+  changePasswordTokenTimestamp: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

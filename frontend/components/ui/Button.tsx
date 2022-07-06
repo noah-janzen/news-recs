@@ -7,6 +7,7 @@ import {
   Platform,
 } from 'react-native'
 import { GlobalStyles } from '../../constants/style'
+import LoadingSpinner from './LoadingSpinner'
 
 export type Props = {
   children: React.ReactNode
@@ -14,18 +15,26 @@ export type Props = {
   style?: ViewStyle
   outline?: boolean
   disabled?: boolean
+  isLoading?: boolean
 }
 
 const isIOS = Platform.OS === 'ios'
 
-function Button({ children, onPress, style, outline, disabled }: Props) {
+function Button({
+  children,
+  onPress,
+  style,
+  outline,
+  disabled,
+  isLoading,
+}: Props) {
   return (
     <View
       style={[
         styles.buttonOuterContainer,
         !isIOS && (outline ? styles.bgOutline : styles.bgFilled),
         style,
-        disabled && styles.disabled,
+        (disabled || isLoading) && styles.disabled,
       ]}
     >
       <Pressable
@@ -37,12 +46,19 @@ function Button({ children, onPress, style, outline, disabled }: Props) {
       >
         <View
           style={[
+            styles.buttonInnerContainer,
             outline
               ? styles.buttonInnerContainerOutline
-              : styles.buttonInnerContainer,
+              : styles.buttonInnerContainerFilled,
             isIOS && (outline ? styles.bgOutline : styles.bgFilled),
           ]}
         >
+          {isLoading && (
+            <LoadingSpinner
+              color={GlobalStyles.colors.primary300}
+              style={{ marginVertical: -5, marginRight: 6 }}
+            />
+          )}
           <Text
             style={[styles.buttonText, outline && styles.buttonTextOutline]}
           >
@@ -69,13 +85,17 @@ const styles = StyleSheet.create({
   },
   buttonInnerContainer: {
     borderRadius: borderRadius,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  buttonInnerContainerFilled: {
     paddingVertical: paddingVertical,
     paddingHorizontal: paddingHorizontal,
   },
   buttonInnerContainerOutline: {
     paddingVertical: paddingVertical - borderWidth,
     paddingHorizontal: paddingHorizontal - borderWidth,
-    borderRadius: borderRadius,
     borderWidth: borderWidth,
     borderColor: GlobalStyles.colors.primary800,
   },
