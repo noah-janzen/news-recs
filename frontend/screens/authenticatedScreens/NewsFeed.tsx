@@ -42,7 +42,7 @@ function NewsFeed() {
   const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 33 })
 
   async function fetchNews() {
-    const news = await getNews({ limit: 5, offset: 3 })
+    const news = await getNews({ limit: 5, offset: 0 })
     // TODO: filter in Backend
     return news.items.filter((newsItem) => newsItem.image)
   }
