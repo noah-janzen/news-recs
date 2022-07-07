@@ -31,21 +31,40 @@ export class NewsArticlesService {
     };
   }
 
-  private async getLatestNewsArticles(
+  private async getMostPopularNewsArticles(
     userId: string,
     newsPagination: NewsPagination,
   ) {
     const unseenNewsArticles = await this.getUnseenNewsArticles(userId);
+    const mostPopularNewsArticles =
+      await this.interactionsService.getMostPopularNewsArticleIds();
+
+    unseenNewsArticles.sort((a, b) => {
+      const clicksA = mostPopularNewsArticles.find(
+        (item) => item._id === a.id,
+      )?.clicks;
+      const clicksB = mostPopularNewsArticles.find(
+        (item) => item._id === b.id,
+      )?.clicks;
+
+      if (clicksA && clicksB) {
+        return clicksB - clicksA;
+      }
+
+      if (clicksA) return -1;
+      if (clicksB) return 1;
+      return 0;
+    });
+
     return unseenNewsArticles
       .slice(newsPagination.offset)
       .slice(0, newsPagination.limit);
   }
 
-  private async getMostPopularNewsArticles(
+  private async getLatestNewsArticles(
     userId: string,
     newsPagination: NewsPagination,
   ) {
-    // TODO: implement
     const unseenNewsArticles = await this.getUnseenNewsArticles(userId);
     return unseenNewsArticles
       .slice(newsPagination.offset)
