@@ -13,3 +13,28 @@ export function parseDate({ year, month, day }: DateEntered) {
 
   return new Date(dateISOString)
 }
+
+export function getTimeInterval(date: Date) {
+  const now = new Date()
+  const timeIntervalInMinutes = Math.ceil(
+    (now.getTime() - date.getTime()) / 1000 / 60
+  )
+
+  if (timeIntervalInMinutes < 60) {
+    return `vor ${Math.ceil(timeIntervalInMinutes)} ${
+      timeIntervalInMinutes > 1 ? 'Minuten' : 'Minute'
+    }`
+  }
+
+  const timeIntervalInHours = timeIntervalInMinutes / 60
+  if (timeIntervalInHours < 24) {
+    return `vor ${Math.ceil(timeIntervalInHours)} ${
+      timeIntervalInHours > 1 ? 'Stunden' : 'Stunde'
+    }`
+  }
+
+  const timeIntervalInDays = timeIntervalInHours / 24
+  return `vor ${Math.ceil(timeIntervalInDays)} ${
+    timeIntervalInDays > 1 ? 'Tagen' : 'Tag'
+  }`
+}

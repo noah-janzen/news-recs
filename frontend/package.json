@@ -25,7 +25,8 @@
     "react-native": "0.68.2",
     "react-native-config": "^1.4.6",
     "react-native-web": "0.17.7",
-    "react-redux": "^8.0.2"
+    "react-redux": "^8.0.2",
+    "expo-web-browser": "~10.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

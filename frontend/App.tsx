@@ -50,17 +50,21 @@ import ChangePasswordScreen from './screens/unauthenticatedScreens/ChangePasswor
 
 const Stack = createNativeStackNavigator()
 
+const globalHeaderOptions = {
+  headerTintColor: GlobalStyles.colors.primary900,
+  headerStyle: { backgroundColor: GlobalStyles.colors.bgTop },
+  headerTitleStyle: {
+    fontFamily: 'EncodeSans_700Bold',
+  },
+}
+
 function AuthStack() {
   const registrationHeaderOptions = {
+    ...globalHeaderOptions,
     animation: 'slide_from_right',
     title: 'Registrieren',
-    headerTintColor: GlobalStyles.colors.primary900,
     headerBackTitleVisible: false,
-    headerStyle: { backgroundColor: GlobalStyles.colors.bgTop },
     headerShadowVisible: false,
-    headerTitleStyle: {
-      fontFamily: 'EncodeSans_700Bold',
-    },
   }
 
   return (
@@ -121,9 +125,17 @@ function AuthStack() {
 }
 
 function AuthenticatedStack() {
+  const authenticatedHeaderOptions = {
+    ...globalHeaderOptions,
+  }
+
   return (
     <Stack.Navigator>
-      <Stack.Screen name="NewsFeedScreen" component={NewsFeed} />
+      <Stack.Screen
+        name="NewsFeedScreen"
+        component={NewsFeed}
+        options={{ ...authenticatedHeaderOptions, title: 'News' }}
+      />
     </Stack.Navigator>
   )
 }
@@ -132,7 +144,6 @@ function Navigation() {
   const isAuthenticated = useSelector(
     (state: StoreReducer) => !!state.auth.access_token
   )
-  console.log(useSelector((state: StoreReducer) => state.auth))
 
   return (
     <NavigationContainer>

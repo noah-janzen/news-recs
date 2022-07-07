@@ -129,4 +129,14 @@ export class UsersService {
 
     return randomNumber.toString();
   }
+
+  getGroup(userId: string) {
+    // ObjectId is a 12-byte hexadezimal number (24 digits)
+    // A 4-byte timestamp
+    // A 5-byte random value
+    // A 3-byte incrementing counter, initialized to a random value.
+    const userCounter = parseInt(userId.slice(18, 24), 16);
+    const numberOfGroups = 2;
+    return userCounter % numberOfGroups;
+  }
 }

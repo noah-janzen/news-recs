@@ -4,8 +4,8 @@ interface NewsDto {
   abstract: string;
   image: string;
   url: string;
-  datePublished: Date;
-  source: string;
+  datePublished: string;
+  sourceOrganization: string;
 }
 
 export { NewsDto };
