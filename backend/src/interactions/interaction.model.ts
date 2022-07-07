@@ -26,7 +26,7 @@ export class Interaction {
     required: true,
     default: new Date(),
   })
-  timestamp: Date;
+  lastInteraction: Date;
 
   @Prop({
     required: true,

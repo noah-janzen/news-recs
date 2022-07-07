@@ -12,5 +12,6 @@ import { Interaction, InteractionSchema } from './interaction.model';
   ],
   providers: [InteractionsService],
   controllers: [InteractionsController],
+  exports: [InteractionsService],
 })
 export class InteractionsModule {}

@@ -10,6 +10,7 @@ import * as WebBrowser from 'expo-web-browser'
 
 import { NewsDto } from '../../../model/dto/News.dto'
 import { getTimeInterval } from '../../../util/Date'
+import { addInteraction } from '../../../api/interaction'
 
 function formatSourceOrganization(sourceOrganization: string) {
   function capitalizeFirstLetter(sourceOrganization: string) {
@@ -35,7 +36,7 @@ function NewsItem({
   url,
 }: NewsDto) {
   function openNewsArticleHandler() {
-    // TODO: Store user interaction
+    addInteraction({ newsArticleId: id, clicked: true })
     WebBrowser.openBrowserAsync(url)
   }
 

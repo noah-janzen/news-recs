@@ -3,7 +3,7 @@ import { NewsPaginationDto } from '../model/dto/NewsPagination.dto'
 import { NewsResultDto } from '../model/dto/NewsResult.dto'
 
 const BACKEND_URL = 'http://192.168.178.34:3000'
-const BACKEND_NEWS_PATH = `${BACKEND_URL}/news`
+const BACKEND_NEWS_PATH = `${BACKEND_URL}/news-articles`
 
 export async function getNews({ limit, offset }: NewsPaginationDto) {
   const params: { [key: string]: string } = {}
