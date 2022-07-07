@@ -1,6 +1,6 @@
-import { NewsDto } from './dto/news.dto';
+import { NewsArticleDto } from './dto/news-article.dto';
 
-const mockNewsList: NewsDto[] = [
+const mockNewsList: NewsArticleDto[] = [
   {
     id: '62b74d289e46b6d40f62fe56',
     headline:

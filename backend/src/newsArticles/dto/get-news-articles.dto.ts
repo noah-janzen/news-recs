@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Length, Min } from 'class-validator';
+import { IsInt, IsOptional, Min } from 'class-validator';
 
-class GetNewsDto {
+class GetNewsArticlesDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
@@ -15,4 +15,4 @@ class GetNewsDto {
   limit?: number;
 }
 
-export { GetNewsDto };
+export { GetNewsArticlesDto };

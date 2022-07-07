@@ -1,4 +1,4 @@
-interface NewsDto {
+interface NewsArticleDto {
   id: string;
   headline: string;
   abstract: string;
@@ -8,4 +8,4 @@ interface NewsDto {
   sourceOrganization: string;
 }
 
-export { NewsDto };
+export { NewsArticleDto };
