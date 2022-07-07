@@ -48,6 +48,7 @@ function NewsFeed() {
   }
 
   async function loadAdditionalNewsItems() {
+    setIsLoadingAdditionalNewsArticles(true)
     const additionalNewsItems = await fetchNews()
     // Filter duplicate fetched news
     const uniqueAdditionalNewsItems = additionalNewsItems.filter(
@@ -57,6 +58,7 @@ function NewsFeed() {
       ...currentNewsItems,
       ...uniqueAdditionalNewsItems,
     ])
+    setIsLoadingAdditionalNewsArticles(false)
   }
 
   useEffect(() => {
@@ -71,7 +73,7 @@ function NewsFeed() {
 
   if (isInitialLoading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center' }}>
+      <View style={{ flex: 1, alignItems: 'center', marginTop: 30 }}>
         <ActivityIndicator />
       </View>
     )
@@ -88,6 +90,14 @@ function NewsFeed() {
     setIsRefreshing(false)
   }
 
+  function BottomLoadingIndicator() {
+    return (
+      <View style={{ alignItems: 'center', marginTop: 18, marginBottom: 30 }}>
+        <ActivityIndicator />
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -101,6 +111,7 @@ function NewsFeed() {
         onEndReached={loadAdditionalNewsItems}
         viewabilityConfig={viewConfigRef.current}
         onViewableItemsChanged={onViewRef.current}
+        ListFooterComponent={<BottomLoadingIndicator />}
       />
     </View>
   )
