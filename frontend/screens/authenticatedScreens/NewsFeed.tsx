@@ -47,6 +47,18 @@ function NewsFeed() {
     return news.items.filter((newsItem) => newsItem.image)
   }
 
+  async function loadAdditionalNewsItems() {
+    const additionalNewsItems = await fetchNews()
+    // Filter duplicate fetched news
+    const uniqueAdditionalNewsItems = additionalNewsItems.filter(
+      (item) => newsItems.findIndex((existing) => existing.id === item.id) < 0
+    )
+    setNewsItems((currentNewsItems) => [
+      ...currentNewsItems,
+      ...uniqueAdditionalNewsItems,
+    ])
+  }
+
   useEffect(() => {
     async function fetchInitialNews() {
       const newsItems = await fetchNews()
@@ -65,8 +77,8 @@ function NewsFeed() {
     )
   }
 
-  function renderNewsItem({ item }: { item: NewsDto }) {
-    return <NewsItem {...item} />
+  function renderNewsItem(item: NewsDto, isLastItem: boolean) {
+    return <NewsItem {...item} isLastItem={isLastItem} />
   }
 
   async function onRefresh() {
@@ -80,10 +92,13 @@ function NewsFeed() {
     <View style={styles.container}>
       <FlatList
         data={newsItems}
-        renderItem={renderNewsItem}
+        renderItem={({ item, index }: { item: NewsDto; index: number }) =>
+          renderNewsItem(item, index === newsItems.length - 1)
+        }
         keyExtractor={(item) => item.id}
         onRefresh={onRefresh}
         refreshing={isRefreshing}
+        onEndReached={loadAdditionalNewsItems}
         viewabilityConfig={viewConfigRef.current}
         onViewableItemsChanged={onViewRef.current}
       />

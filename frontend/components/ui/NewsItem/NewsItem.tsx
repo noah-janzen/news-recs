@@ -34,14 +34,15 @@ function NewsItem({
   image,
   sourceOrganization,
   url,
-}: NewsDto) {
+  isLastItem,
+}: NewsDto & { isLastItem: boolean }) {
   function openNewsArticleHandler() {
     addInteraction({ newsArticleId: id, clicked: true })
     WebBrowser.openBrowserAsync(url)
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isLastItem && styles.lastItem]}>
       <Pressable
         onPress={openNewsArticleHandler}
         style={({ pressed }) => [
@@ -82,6 +83,9 @@ const styles = StyleSheet.create({
 
     borderRadius: 8,
     overflow: 'hidden',
+  },
+  lastItem: {
+    marginBottom: 12,
   },
   pressableContainer: {
     backgroundColor: 'white',
