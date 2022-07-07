@@ -48,7 +48,6 @@ function NewsFeed() {
   }
 
   async function loadAdditionalNewsItems() {
-    setIsLoadingAdditionalNewsArticles(true)
     const additionalNewsItems = await fetchNews()
     // Filter duplicate fetched news
     const uniqueAdditionalNewsItems = additionalNewsItems.filter(
@@ -58,7 +57,6 @@ function NewsFeed() {
       ...currentNewsItems,
       ...uniqueAdditionalNewsItems,
     ])
-    setIsLoadingAdditionalNewsArticles(false)
   }
 
   useEffect(() => {
