@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { emailValid, passwordValid } from '../../util/Validation'
-import { AppDispatch, StoreReducer } from '../../store/store'
+import { StoreReducer, useAppDispatch } from '../../store/store'
 import { setValue } from '../../store/registrationSlice'
 import Input from '../../components/ui/Input'
 import PasswordValidContainer from '../../components/unauthenticated/PasswordValidContainer'
@@ -22,7 +22,7 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
   const [submitted, setSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
   const email = useSelector((state: StoreReducer) => state.registration.email)
   const password = useSelector(

@@ -47,6 +47,8 @@ import ConfirmAccountScreen from './screens/unauthenticatedScreens/ConfirmAccoun
 import NewsFeed from './screens/authenticatedScreens/NewsFeed'
 import ForgotPasswordScreen from './screens/unauthenticatedScreens/ForgotPasswordScreen'
 import ChangePasswordScreen from './screens/unauthenticatedScreens/ChangePasswordScreen'
+import ProfileHeaderIcon from './components/authenticated/ProfileHeaderIcon'
+import AccountScreen from './screens/authenticatedScreens/AccountScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -134,7 +136,19 @@ function AuthenticatedStack() {
       <Stack.Screen
         name="NewsFeedScreen"
         component={NewsFeed}
-        options={{ ...authenticatedHeaderOptions, title: 'News' }}
+        options={{
+          ...authenticatedHeaderOptions,
+          title: 'News',
+          headerRight: () => <ProfileHeaderIcon />,
+        }}
+      />
+      <Stack.Screen
+        name="AccountScreen"
+        component={AccountScreen}
+        options={{
+          ...authenticatedHeaderOptions,
+          title: 'Account',
+        }}
       />
     </Stack.Navigator>
   )
@@ -142,7 +156,7 @@ function AuthenticatedStack() {
 
 function Navigation() {
   const isAuthenticated = useSelector(
-    (state: StoreReducer) => !!state.auth.access_token
+    (state: StoreReducer) => !!state.auth.tokens.access_token
   )
 
   return (

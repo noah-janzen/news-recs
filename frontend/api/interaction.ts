@@ -1,9 +1,8 @@
-import { axiosAuth } from './axios'
+import { axiosPrivate } from './axios'
 import { AddInteractionDto } from '../model/dto/AddInteraction.dto'
 
-const BACKEND_URL = 'http://192.168.178.34:3000'
-const BACKEND_INTERACTIONS_PATH = `${BACKEND_URL}/interactions`
+const BACKEND_INTERACTIONS_PATH = `/interactions`
 
 export async function addInteraction(addInteractionDto: AddInteractionDto) {
-  await axiosAuth.post(BACKEND_INTERACTIONS_PATH, { ...addInteractionDto }) // TODO: Typing with type parameter
+  await axiosPrivate.post<void>(BACKEND_INTERACTIONS_PATH, addInteractionDto)
 }

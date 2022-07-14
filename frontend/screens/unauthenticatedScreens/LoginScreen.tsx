@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert, StyleSheet } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import { setTokens } from '../../store/authSlice'
-import { signIn } from '../../api/auth'
+import { authenticate } from '../../store/authSlice'
 import { emailValid, passwordLengthValid } from '../../util/Validation'
 import ExpiryContainer from '../../components/ui/ExpiryContainer'
 import Input from '../../components/ui/Input'
@@ -13,6 +12,8 @@ import {
   RouteProp,
 } from '@react-navigation/native'
 import SmallButton from '../../components/ui/SmallButton'
+import { useAppDispatch } from '../../store/store'
+import { StoreReducer } from '../../store/store'
 
 export type Props = {
   route: RouteProp<{ params: { email: string; password: string } }>
@@ -26,29 +27,31 @@ function LoginScreen({ route, navigation }: Props) {
   const [email, setEmail] = useState(route?.params?.email ?? '')
   const [password, setPassword] = useState(route?.params?.password ?? '')
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+  const authenticationStatus = useSelector(
+    (state: StoreReducer) => state.auth.authentication.status
+  )
+  const authenticationError = useSelector(
+    (state: StoreReducer) => state.auth.authentication.error
+  )
 
   async function signInHandler() {
     setIsSubmitted(true)
     if (!formValid()) return
 
     setIsLoading(true)
-    try {
-      const response = await signIn({ email, password })
-      const tokens = response.data
-      dispatch(setTokens(tokens))
-    } catch (error) {
-      const errorMessage = error.response.data.message
-      // check if errorMessage is array or a simple string
-      const alertMessage =
-        typeof errorMessage === 'string' ? errorMessage : errorMessage[0]
-      if (errorMessage === 'USER_NOT_CONFIRMED') {
-        navigation.navigate('ConfirmAccountScreen', { email, password })
-      }
-      Alert.alert('Fehler', alertMessage)
-      setIsLoading(false)
-    }
+    dispatch(authenticate({ email, password }))
   }
+
+  useEffect(() => {
+    if (!authenticationError || authenticationStatus !== 'failed') return
+
+    setIsLoading(false)
+    if (authenticationError === 'USER_NOT_CONFIRMED') {
+      navigation.navigate('ConfirmAccountScreen', { email, password })
+    }
+    Alert.alert('Fehler', authenticationError)
+  }, [authenticationStatus, authenticationError])
 
   function forgotPasswordHandler() {
     navigation.navigate('ForgotPasswordScreen', {
