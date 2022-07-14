@@ -100,6 +100,7 @@ function NewsFeed() {
         onRefresh={onRefresh}
         refreshing={isRefreshing}
         onEndReached={loadAdditionalNewsItems}
+        onEndReachedThreshold={0.1}
         viewabilityConfig={viewConfigRef.current}
         onViewableItemsChanged={onViewRef.current}
         ListFooterComponent={<BottomLoadingIndicator />}
