@@ -6,6 +6,7 @@ import InputLabel from './InputLabel'
 import InputControl from './InputControl'
 import ErrorLabel from './ErrorLabel'
 import { DateEntered } from '../../model/DateEntered'
+import i18n from '../../i18n'
 
 export type Props = {
   label: string
@@ -75,7 +76,7 @@ function DateInput({
           style={[styles.input, styles.leftElement]}
           textInputConfig={{
             keyboardType: 'number-pad',
-            placeholder: 'Tag',
+            placeholder: i18n.t('common.DateInput.dayPlaceholder'),
             maxLength: 2,
             value: inputs.day.value,
             onChangeText: (day: string) =>
@@ -90,7 +91,7 @@ function DateInput({
           style={[styles.input, styles.centerElement]}
           textInputConfig={{
             keyboardType: 'number-pad',
-            placeholder: 'Monat',
+            placeholder: i18n.t('common.DateInput.monthPlaceholder'),
             maxLength: 2,
             value: inputs.month.value,
             onChangeText: (month: string) =>
@@ -106,7 +107,7 @@ function DateInput({
           style={[styles.input, styles.rightElement]}
           textInputConfig={{
             keyboardType: 'number-pad',
-            placeholder: 'Jahr',
+            placeholder: i18n.t('common.DateInput.yearPlaceholder'),
             maxLength: 4,
             value: inputs.year.value,
             onChangeText: (year: string) =>

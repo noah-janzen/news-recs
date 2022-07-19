@@ -51,6 +51,7 @@ import ForgotPasswordScreen from './screens/unauthenticatedScreens/ForgotPasswor
 import ChangePasswordScreen from './screens/unauthenticatedScreens/ChangePasswordScreen'
 import ProfileHeaderIcon from './components/authenticated/ProfileHeaderIcon'
 import AccountScreen from './screens/authenticatedScreens/AccountScreen'
+import i18n from './i18n'
 
 const Stack = createNativeStackNavigator()
 
@@ -66,7 +67,7 @@ function AuthStack() {
   const registrationHeaderOptions = {
     ...globalHeaderOptions,
     animation: 'slide_from_right',
-    title: 'Registrieren',
+    title: i18n.t('common.registrationHeaderTitle'),
     headerBackTitleVisible: false,
     headerShadowVisible: false,
   }
@@ -83,17 +84,26 @@ function AuthStack() {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
-        options={{ ...registrationHeaderOptions, title: 'Anmelden' }}
+        options={{
+          ...registrationHeaderOptions,
+          title: i18n.t('LoginScreen.headerTitle'),
+        }}
       />
       <Stack.Screen
         name="ForgotPasswordScreen"
         component={ForgotPasswordScreen}
-        options={{ ...registrationHeaderOptions, title: 'Passwort vergessen' }}
+        options={{
+          ...registrationHeaderOptions,
+          title: i18n.t('ForgotPasswordScreen.headerTitle'),
+        }}
       />
       <Stack.Screen
         name="ChangePasswordScreen"
         component={ChangePasswordScreen}
-        options={{ ...registrationHeaderOptions, title: 'Passwort vergessen' }}
+        options={{
+          ...registrationHeaderOptions,
+          title: i18n.t('ChangePasswordScreen.headerTitle'),
+        }}
       />
       <Stack.Screen
         name="RegistrationLanguageScreen"
@@ -121,7 +131,7 @@ function AuthStack() {
         component={ConfirmAccountScreen}
         options={{
           ...registrationHeaderOptions,
-          title: 'Konto bestätigen',
+          title: i18n.t('ConfirmAccountScreen.headerTitle'),
         }}
       />
     </Stack.Navigator>
@@ -140,7 +150,7 @@ function AuthenticatedStack() {
         component={NewsFeed}
         options={{
           ...authenticatedHeaderOptions,
-          title: 'News',
+          title: i18n.t('NewsFeedScreen.headerTitle'),
           headerRight: () => <ProfileHeaderIcon />,
         }}
       />
@@ -149,7 +159,7 @@ function AuthenticatedStack() {
         component={AccountScreen}
         options={{
           ...authenticatedHeaderOptions,
-          title: 'Account',
+          title: i18n.t('AccountScreen.headerTitle'),
         }}
       />
     </Stack.Navigator>

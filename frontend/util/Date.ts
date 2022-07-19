@@ -1,3 +1,4 @@
+import i18n from '../i18n'
 import { DateEntered } from '../model/DateEntered'
 
 function zeroPad(number: string, places: number) {
@@ -21,20 +22,38 @@ export function getTimeInterval(date: Date) {
   )
 
   if (timeIntervalInMinutes < 60) {
-    return `vor ${Math.ceil(timeIntervalInMinutes)} ${
-      timeIntervalInMinutes > 1 ? 'Minuten' : 'Minute'
-    }`
+    return (
+      i18n.t('common.timeInterval.pre') +
+      Math.ceil(timeIntervalInMinutes) +
+      ' ' +
+      (timeIntervalInMinutes > 1
+        ? i18n.t('common.timeInterval.minutes')
+        : i18n.t('common.timeInterval.minute')) +
+      i18n.t('common.timeInterval.post')
+    )
   }
 
   const timeIntervalInHours = timeIntervalInMinutes / 60
   if (timeIntervalInHours < 24) {
-    return `vor ${Math.ceil(timeIntervalInHours)} ${
-      timeIntervalInHours > 1 ? 'Stunden' : 'Stunde'
-    }`
+    return (
+      i18n.t('common.timeInterval.pre') +
+      Math.ceil(timeIntervalInHours) +
+      ' ' +
+      (timeIntervalInHours > 1
+        ? i18n.t('common.timeInterval.hours')
+        : i18n.t('common.timeInterval.hour')) +
+      i18n.t('common.timeInterval.post')
+    )
   }
 
   const timeIntervalInDays = timeIntervalInHours / 24
-  return `vor ${Math.ceil(timeIntervalInDays)} ${
-    timeIntervalInDays > 1 ? 'Tagen' : 'Tag'
-  }`
+  return (
+    i18n.t('common.timeInterval.pre') +
+    Math.ceil(timeIntervalInDays) +
+    ' ' +
+    (timeIntervalInDays > 1
+      ? i18n.t('common.timeInterval.days')
+      : i18n.t('common.timeInterval.day')) +
+    i18n.t('common.timeInterval.post')
+  )
 }

@@ -10,6 +10,7 @@ import ExpiryContainer from '../../components/ui/ExpiryContainer'
 import Input from '../../components/ui/Input'
 import { Alert } from 'react-native'
 import { forgotPassword } from '../../api/auth'
+import i18n from '../../i18n'
 
 export type Props = {
   route: RouteProp<{ params: { email: string; password?: string } }>
@@ -31,15 +32,18 @@ function ForgotPasswordScreen({ route, navigation }: Props) {
       setIsLoading(false)
       navigation.navigate('ChangePasswordScreen', { email })
       Alert.alert(
-        'Code gesendet',
-        'Du hast per E-Mail einen Code zur Änderung deines Passworts erhalten.'
+        i18n.t('ForgotPasswordScreen.successAlert.title'),
+        i18n.t('ForgotPasswordScreen.successAlert.description')
       )
     } catch (error) {
       const errorMessage = error.response.data.message
       // check if errorMessage is array or a simple string
       const alertMessage =
         typeof errorMessage === 'string' ? errorMessage : errorMessage[0]
-      Alert.alert('Fehler', alertMessage)
+      Alert.alert(
+        i18n.t('ForgotPasswordScreen.errorAlert.title'),
+        i18n.t(`ForgotPasswordScreen.errorAlert.${alertMessage}`)
+      )
       setIsLoading(false)
     }
   }
@@ -53,12 +57,14 @@ function ForgotPasswordScreen({ route, navigation }: Props) {
       onNext={forgotPasswordHandler}
       loading={isLoading}
       nextDisabled={!formValid()}
-      nextLabel="Passwort vergessen"
+      nextLabel={i18n.t('ForgotPasswordScreen.nextLabel')}
     >
       <Input
-        label="E-Mail"
+        label={i18n.t('ForgotPasswordScreen.emailInput.label')}
         invalid={
-          emailValid(email) ? null : 'Gib eine gültige E-Mail-Adresse ein'
+          emailValid(email)
+            ? null
+            : i18n.t('ForgotPasswordScreen.emailInput.errorLabel')
         }
         submitted={isSubmitted}
         textInputConfig={{

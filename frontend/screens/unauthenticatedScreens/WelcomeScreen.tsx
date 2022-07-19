@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import i18n from '../../i18n'
 
 import Button from '../../components/ui/Button'
 import Title from '../../components/ui/Title'
@@ -22,7 +23,7 @@ function WelcomeScreen({ navigation }: Props) {
   return (
     <Container justifyContent="flex-end">
       <View style={styles.introContainer}>
-        <Title>Willkommen bei NewsRecs</Title>
+        <Title>{i18n.t('WelcomeScreen.welcomeTitle')}</Title>
         <IntroText />
       </View>
 
@@ -32,9 +33,11 @@ function WelcomeScreen({ navigation }: Props) {
           style={styles.registerButton}
           outline
         >
-          Registrieren
+          {i18n.t('WelcomeScreen.signUpButtonLabel')}
         </Button>
-        <Button onPress={loginClickHandler}>Anmelden</Button>
+        <Button onPress={loginClickHandler}>
+          {i18n.t('WelcomeScreen.signInButtonLabel')}
+        </Button>
       </View>
     </Container>
   )

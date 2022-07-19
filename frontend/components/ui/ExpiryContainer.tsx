@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native'
 
 import Button from '../ui/Button'
 import Container from './Container'
+import i18n from '../../i18n'
 
 export type Props = {
   onNext: () => void
@@ -24,7 +25,7 @@ function ExpiryContainer({
 
       <View style={styles.buttonContainer}>
         <Button disabled={nextDisabled} onPress={onNext} isLoading={loading}>
-          {nextLabel ?? 'Weiter'}
+          {nextLabel ?? i18n.t('common.ExpiryContainer.nextLabel')}
         </Button>
       </View>
     </Container>

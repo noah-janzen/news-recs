@@ -1,23 +1,19 @@
 import { StyleSheet, View, Text } from 'react-native'
 
 import { GlobalStyles } from '../../constants/style'
+import i18n from '../../i18n'
 
 function IntroText() {
   return (
     <View>
       <Text style={styles.introText}>
-        NewsRecs empfielt Dir Nachrichten auf Basis von{' '}
-        <Text style={styles.important}>Künstlicher Intelligenz</Text>.
+        {i18n.t('WelcomeScreen.introText.newsRecsRecommendsNews')}
       </Text>
       <Text style={styles.introText}>
-        Die App sammelt im Rahmen der Forschung{' '}
-        <Text style={styles.important}>Nutzungsdaten</Text>. Damit wollen wir
-        die <Text style={styles.important}>Leistungsfähigkeit</Text>{' '}
-        verschiedener Algorithmen vergleichen.
+        {i18n.t('WelcomeScreen.introText.newsRecsTracksUsageData')}
       </Text>
       <Text style={styles.introText}>
-        Unterstütze die Forschung und erhalte{' '}
-        <Text style={styles.important}>relevante Nachrichten</Text>.
+        {i18n.t('WelcomeScreen.introText.supportResearch')}
       </Text>
     </View>
   )

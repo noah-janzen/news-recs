@@ -11,6 +11,7 @@ import Input from '../../components/ui/Input'
 import PasswordValidContainer from '../../components/unauthenticated/PasswordValidContainer'
 import { changePassword } from '../../api/auth'
 import { Alert } from 'react-native'
+import i18n from '../../i18n'
 
 export type Props = {
   route: RouteProp<{ params: { email: string } }>
@@ -38,17 +39,21 @@ function ChangePasswordScreen({ route, navigation }: Props) {
       setIsLoading(false)
       navigation.navigate('LoginScreen')
       Alert.alert(
-        'Passwort geändert',
-        'Du hast das Passwort erfolgreich geändert'
+        i18n.t('ChangePasswordScreen.successAlert.title'),
+        i18n.t('ChangePasswordScreen.successAlert.description')
       )
-    } catch (error) {
+    } catch (error: any) {
+      // TODO: Typescript typing
       const errorMessage = error.response.data.message
       // check if errorMessage is array or a simple string
       const alertMessage =
         typeof errorMessage === 'string'
           ? errorMessage
           : errorMessage.join('. ')
-      Alert.alert('Fehler', alertMessage)
+      Alert.alert(
+        i18n.t('ChangePasswordScreen.errorAlert.title'),
+        i18n.t(`ChangePasswordScreen.errorAlert.${alertMessage}`)
+      )
       setIsLoading(false)
     }
   }
@@ -64,12 +69,14 @@ function ChangePasswordScreen({ route, navigation }: Props) {
       onNext={changePasswordHandler}
       loading={isLoading}
       nextDisabled={!formValid()}
-      nextLabel="Passwort ändern"
+      nextLabel={i18n.t('ChangePasswordScreen.nextLabel')}
     >
       <Input
-        label="Code"
+        label={i18n.t('ChangePasswordScreen.codeInput.label')}
         invalid={
-          tokenValid(passwordChangeToken) ? null : 'Gib einen gültigen Code ein'
+          tokenValid(passwordChangeToken)
+            ? null
+            : i18n.t('ChangePasswordScreen.codeInput.errorLabel')
         }
         submitted={isSubmitted}
         textInputConfig={{
@@ -82,11 +89,11 @@ function ChangePasswordScreen({ route, navigation }: Props) {
       />
 
       <Input
-        label="Neues Passwort"
+        label={i18n.t('ChangePasswordScreen.passwordInput.label')}
         invalid={
           passwordValid(newPassword)
             ? null
-            : 'Das Passwort muss alle Anforderungen erfüllen'
+            : i18n.t('ChangePasswordScreen.passwordInput.errorLabel')
         }
         submitted={isSubmitted}
         textInputConfig={{

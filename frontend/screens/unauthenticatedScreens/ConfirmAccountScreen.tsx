@@ -4,9 +4,8 @@ import {
   ParamListBase,
   RouteProp,
 } from '@react-navigation/native'
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import { Feather } from '@expo/vector-icons'
-import { useDispatch, useSelector } from 'react-redux'
 
 import ExpiryContainer from '../../components/ui/ExpiryContainer'
 import Input from '../../components/ui/Input'
@@ -14,6 +13,7 @@ import { GlobalStyles } from '../../constants/style'
 import { tokenValid } from '../../util/Validation'
 import { confirmUser, renewConfirmationToken } from '../../api/auth'
 import SmallButton from '../../components/ui/SmallButton'
+import i18n from '../../i18n'
 
 export type Props = {
   route: RouteProp<{ params: { email: string; password?: string } }>
@@ -39,7 +39,10 @@ function ConfirmAccountScreen({ route, navigation }: Props) {
         email,
         password,
       })
-      Alert.alert('Konto bestätigt', 'Du hast Dein Konto bestätigt.')
+      Alert.alert(
+        i18n.t('ConfirmAccountScreen.successAlert.title'),
+        i18n.t('ConfirmAccountScreen.successAlert.description')
+      )
     } catch (error: any) {
       const errorMessage = error.response.data.message
       // check if errorMessage is array or a simple string
@@ -47,7 +50,10 @@ function ConfirmAccountScreen({ route, navigation }: Props) {
         typeof errorMessage === 'string'
           ? errorMessage
           : errorMessage.join('. ')
-      Alert.alert('Fehler', alertMessage)
+      Alert.alert(
+        i18n.t('ConfirmAccountScreen.errorAlert.title'),
+        i18n.t(`ConfirmAccountScreen.errorAlert.${alertMessage}`)
+      )
       setIsLoading(false)
     }
   }
@@ -65,15 +71,17 @@ function ConfirmAccountScreen({ route, navigation }: Props) {
     })
 
     Alert.alert(
-      'Neuer Code',
-      'Dir wurde ein neuer Bestätigungscode per E-Mail gesendet.'
+      i18n.t('ConfirmAccountScreen.renewConfirmationTokenSuccessAlert.title'),
+      i18n.t(
+        'ConfirmAccountScreen.renewConfirmationTokenSuccessAlert.description'
+      )
     )
   }
 
   return (
     <ExpiryContainer
       onNext={nextHandler}
-      nextLabel="Konto bestätigen"
+      nextLabel={i18n.t('ConfirmAccountScreen.nextLabel')}
       nextDisabled={!tokenValid(token)}
       loading={isLoading}
     >
@@ -83,15 +91,23 @@ function ConfirmAccountScreen({ route, navigation }: Props) {
           size={60}
           color={GlobalStyles.colors.primary900}
         />
-        <Text style={styles.successTitle}>Registrierung erfolgreich</Text>
+        <Text style={styles.successTitle}>
+          {i18n.t('ConfirmAccountScreen.confirmationSuccessfulContainer.title')}
+        </Text>
         <Text style={styles.successText}>
-          Du hast eine E-Mail mit einem Bestätigungscode erhalten.
+          {i18n.t(
+            'ConfirmAccountScreen.confirmationSuccessfulContainer.description'
+          )}
         </Text>
       </View>
 
       <Input
-        label="Bestätigungscode"
-        invalid={tokenValid(token) ? null : 'Gib einen gültigen Code ein'}
+        label={i18n.t('ConfirmAccountScreen.tokenInput.label')}
+        invalid={
+          tokenValid(token)
+            ? null
+            : i18n.t('ConfirmAccountScreen.tokenInput.errorLabel')
+        }
         submitted={isSubmitted}
         textInputConfig={{
           value: token,
@@ -106,7 +122,7 @@ function ConfirmAccountScreen({ route, navigation }: Props) {
         style={{ marginBottom: -10, marginTop: 10 }}
         onPress={renewConfirmationTokenHandler}
       >
-        Neuen Bestätigungscode senden
+        {i18n.t('ConfirmAccountScreen.sendNewCodeButtonLabel')}
       </SmallButton>
     </ExpiryContainer>
   )

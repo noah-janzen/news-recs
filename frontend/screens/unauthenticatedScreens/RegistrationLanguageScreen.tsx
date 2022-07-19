@@ -2,12 +2,23 @@ import { useState } from 'react'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 
-import LANGUAGES from '../../util/languages.json'
 import ExpiryContainer from '../../components/ui/ExpiryContainer'
 import ButtonInput from '../../components/ui/ButtonInput'
 import { setValue } from '../../store/registrationSlice'
-import { StoreReducer } from '../../store/store'
+import { StoreReducer } from '../../store/rootReducer'
 import { languageValid } from '../../util/Validation'
+import i18n from '../../i18n'
+
+const languages = [
+  {
+    label: i18n.t('RegistrationLanguageScreen.inputValues.DE'),
+    id: 'DE',
+  },
+  {
+    label: i18n.t('RegistrationLanguageScreen.inputValues.EN'),
+    id: 'EN',
+  },
+]
 
 export type Props = {
   navigation: NavigationProp<ParamListBase>
@@ -35,16 +46,16 @@ function RegistrationLanguageScreen({ navigation }: Props) {
   return (
     <ExpiryContainer
       onNext={nextHandler}
-      nextLabel="Weiter"
+      nextLabel={i18n.t('RegistrationLanguageScreen.nextLabel')}
       nextDisabled={!languageValid(selectedLanguage)}
     >
       <ButtonInput
-        label="Sprache"
+        label={i18n.t('RegistrationLanguageScreen.inputLabel')}
         submitted={submitted}
         onSelect={languageChangedHandler}
         activeElement={selectedLanguage}
-        errorLabel="Gib eine Sprache an"
-        items={LANGUAGES}
+        errorLabel={i18n.t('RegistrationLanguageScreen.errorLabel')}
+        items={languages}
       />
     </ExpiryContainer>
   )

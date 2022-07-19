@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 
+import i18n from '../../i18n'
+
 import {
   passwordContainsRequiredCharacters,
   passwordLengthValid,
@@ -14,15 +16,15 @@ function PasswordValidContainer({ password }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.description}>
-        Dein Passwort muss Folgendes haben:
+        {i18n.t('common.PasswordValidContainer.headline')}
       </Text>
       <PasswordRequirementItem
         isValid={passwordLengthValid(password)}
-        label="8 bis 20 Zeichen"
+        label={i18n.t('common.PasswordValidContainer.numberOfCharacters')}
       />
       <PasswordRequirementItem
         isValid={passwordContainsRequiredCharacters(password)}
-        label="Buchstaben, Ziffern und Sonderzeichen"
+        label={i18n.t('common.PasswordValidContainer.differentCharacters')}
       />
     </View>
   )

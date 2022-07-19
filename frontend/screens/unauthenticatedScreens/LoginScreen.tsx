@@ -13,7 +13,8 @@ import {
 } from '@react-navigation/native'
 import SmallButton from '../../components/ui/SmallButton'
 import { useAppDispatch } from '../../store/store'
-import { StoreReducer } from '../../store/store'
+import { StoreReducer } from '../../store/rootReducer'
+import i18n from '../../i18n'
 
 export type Props = {
   route: RouteProp<{ params: { email: string; password: string } }>
@@ -50,7 +51,10 @@ function LoginScreen({ route, navigation }: Props) {
     if (authenticationError === 'USER_NOT_CONFIRMED') {
       navigation.navigate('ConfirmAccountScreen', { email, password })
     }
-    Alert.alert('Fehler', authenticationError)
+    Alert.alert(
+      i18n.t('LoginScreen.errorAlert.title'),
+      i18n.t(`LoginScreen.errorAlert.${authenticationError}`)
+    )
   }, [authenticationStatus, authenticationError])
 
   function forgotPasswordHandler() {
@@ -68,12 +72,12 @@ function LoginScreen({ route, navigation }: Props) {
       onNext={signInHandler}
       loading={isLoading}
       nextDisabled={!formValid()}
-      nextLabel="Anmelden"
+      nextLabel={i18n.t('LoginScreen.nextLabel')}
     >
       <Input
-        label="E-Mail"
+        label={i18n.t('LoginScreen.emailInput.label')}
         invalid={
-          emailValid(email) ? null : 'Gib eine gültige E-Mail-Adresse ein'
+          emailValid(email) ? null : i18n.t('LoginScreen.emailInput.errorLabel')
         }
         submitted={isSubmitted}
         textInputConfig={{
@@ -86,9 +90,11 @@ function LoginScreen({ route, navigation }: Props) {
       />
 
       <Input
-        label="Passwort"
+        label={i18n.t('LoginScreen.passwordInput.label')}
         invalid={
-          passwordLengthValid(password) ? null : 'Gib ein gültiges Passwort ein'
+          passwordLengthValid(password)
+            ? null
+            : i18n.t('LoginScreen.passwordInput.errorLabel')
         }
         submitted={isSubmitted}
         textInputConfig={{
@@ -104,7 +110,7 @@ function LoginScreen({ route, navigation }: Props) {
         onPress={forgotPasswordHandler}
         style={{ marginBottom: -10, marginTop: 10 }}
       >
-        Passwort vergessen
+        {i18n.t('LoginScreen.forgotPasswordButtonLabel')}
       </SmallButton>
     </ExpiryContainer>
   )

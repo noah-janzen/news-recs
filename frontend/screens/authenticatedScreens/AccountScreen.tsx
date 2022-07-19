@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import Button from '../../components/ui/Button'
 import { logout } from '../../store/authSlice'
 import { logout as logoutAPI } from '../../api/auth'
+import i18n from '../../i18n'
 
 function AccountScreen() {
   const dispatch = useDispatch()
@@ -19,7 +20,7 @@ function AccountScreen() {
   return (
     <View style={styles.container}>
       <Button onPress={logoutHandler} isLoading={isLoading}>
-        Abmelden
+        {i18n.t('AccountScreen.logoutButtonLabel')}
       </Button>
     </View>
   )

@@ -3,7 +3,8 @@ import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 
 import { emailValid, passwordValid } from '../../util/Validation'
-import { StoreReducer, useAppDispatch } from '../../store/store'
+import { useAppDispatch } from '../../store/store'
+import { StoreReducer } from '../../store/rootReducer'
 import { setValue } from '../../store/registrationSlice'
 import Input from '../../components/ui/Input'
 import PasswordValidContainer from '../../components/unauthenticated/PasswordValidContainer'
@@ -13,6 +14,7 @@ import { CreateUserDto } from '../../model/dto/CreateUser.dto'
 import { parseDate } from '../../util/Date'
 import { Alert } from 'react-native'
 import { signUp } from '../../api/auth'
+import i18n from '../../i18n'
 
 export type Props = {
   navigation: NavigationProp<ParamListBase>
@@ -73,14 +75,16 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
   return (
     <ExpiryContainer
       onNext={nextHandler}
-      nextLabel="Registrieren"
+      nextLabel={i18n.t('RegistrationCredentialsScreen.nextLabel')}
       nextDisabled={!formValid()}
       loading={isLoading}
     >
       <Input
-        label="E-Mail"
+        label={i18n.t('RegistrationCredentialsScreen.emailInput.label')}
         invalid={
-          emailValid(email) ? null : 'Gib eine gültige E-Mail-Adresse ein'
+          emailValid(email)
+            ? null
+            : i18n.t('RegistrationCredentialsScreen.emailInput.errorLabel')
         }
         submitted={submitted}
         textInputConfig={{
@@ -92,11 +96,11 @@ function RegistrationCredentialsScreen({ navigation }: Props) {
         }}
       />
       <Input
-        label="Passwort"
+        label={i18n.t('RegistrationCredentialsScreen.passwordInput.label')}
         invalid={
           passwordValid(password)
             ? null
-            : 'Das Passwort muss alle Anforderungen erfüllen'
+            : i18n.t('RegistrationCredentialsScreen.passwordInput.errorLabel')
         }
         submitted={submitted}
         textInputConfig={{
