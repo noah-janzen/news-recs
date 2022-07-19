@@ -1,23 +1,28 @@
 import { configureStore } from '@reduxjs/toolkit'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
-import registrationReducer, { RegistrationData } from './registrationSlice'
-import authReducer, { AuthData } from './authSlice'
-import interactionsReducer, { InteractionsData } from './interactionsSlice'
-
-export interface StoreReducer {
-  registration: RegistrationData
-  auth: AuthData
-  interactions: InteractionsData
-}
+import { rootReducer } from './rootReducer'
 
 export const store = configureStore({
-  reducer: {
-    registration: registrationReducer,
-    auth: authReducer,
-    interactions: interactionsReducer,
-  },
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 })
+export const persistor = persistStore(store)
 
 // SOURCE: https://www.angularfix.com/2022/05/why-argument-of-type-void-is-not.html
 // Infer the `RootState` and `AppDispatch` types from the store itself

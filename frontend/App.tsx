@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { PersistGate } from 'redux-persist/integration/react'
 import { Provider, useSelector } from 'react-redux'
 
-import { store, StoreReducer } from './store/store'
+import { StoreReducer } from './store/rootReducer'
+import { store, persistor } from './store/store'
 
 import {
   useFonts,
@@ -203,7 +205,9 @@ export default function App() {
     <>
       <StatusBar style="auto" />
       <Provider store={store}>
-        <Navigation />
+        <PersistGate loading={null} persistor={persistor}>
+          <Navigation />
+        </PersistGate>
       </Provider>
     </>
   )
