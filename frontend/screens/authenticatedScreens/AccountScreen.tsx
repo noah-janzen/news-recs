@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import Button from '../../components/ui/Button'
@@ -18,8 +18,6 @@ function AccountScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>Profile</Text>
-
       <Button onPress={logoutHandler} isLoading={isLoading}>
         Abmelden
       </Button>
