@@ -20,6 +20,7 @@ export class NewsArticlesService {
 
   async getNewsArticles(userId: string, newsPagination: NewsPagination) {
     const group = this.usersService.getGroup(userId);
+    // TODO: Zuweisung auslagern
     const newsArticles =
       group === 0
         ? await this.getLatestNewsArticles(userId, newsPagination)
