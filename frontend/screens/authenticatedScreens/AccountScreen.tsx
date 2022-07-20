@@ -32,14 +32,23 @@ function AccountScreen() {
   }
 
   const dispatch = useDispatch()
+  const [isInitiallyLoading, setIsInitiallyLoading] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [user, setUser] = useState<User>()
-  const [userForm, setUserForm] = useState<UserForm>()
+  const [userForm, setUserForm] = useState<UserForm>({
+    dateOfBirth: { day: '', month: '', year: '' },
+    gender: '',
+    email: '',
+  })
 
   useEffect(() => {
     async function fetchUser() {
-      const fetchedUser = await getOwnUser()
-      setUser(fetchedUser)
+      try {
+        const fetchedUser = await getOwnUser()
+        setUser(fetchedUser)
+      } finally {
+        setIsInitiallyLoading(false)
+      }
     }
 
     fetchUser()
@@ -100,12 +109,15 @@ function AccountScreen() {
   }
 
   async function logoutHandler() {
-    await logoutAPI()
-    dispatch(clearInteractions())
-    dispatch(logout())
+    try {
+      await logoutAPI()
+    } finally {
+      dispatch(clearInteractions())
+      dispatch(logout())
+    }
   }
 
-  if (!userForm) {
+  if (isInitiallyLoading) {
     return (
       <View style={{ alignItems: 'center', marginTop: 18, marginBottom: 30 }}>
         <ActivityIndicator />
