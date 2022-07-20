@@ -15,7 +15,8 @@ export class InteractionsController {
     await this.interactionsService.addInteraction({
       userId: userId,
       newsArticleId: addInteractionDto.newsArticleId,
-      clicked: addInteractionDto.clicked ?? false,
+      clicked: addInteractionDto.clicked,
+      rating: addInteractionDto.rating,
     });
   }
 }

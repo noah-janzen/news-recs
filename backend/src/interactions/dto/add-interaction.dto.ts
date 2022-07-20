@@ -7,4 +7,7 @@ export class AddInteractionDto {
 
   @IsOptional()
   clicked?: boolean;
+
+  @IsOptional()
+  rating?: string;
 }

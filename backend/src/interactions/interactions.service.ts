@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { AddInteractionDto } from './dto/add-interaction.dto';
@@ -17,15 +17,22 @@ export class InteractionsService {
     userId,
     newsArticleId,
     clicked,
+    rating,
   }: {
     userId: string;
     newsArticleId: string;
-    clicked: boolean;
+    clicked?: boolean;
+    rating?: string;
   }) {
+    if (clicked == undefined && rating == undefined)
+      throw new BadRequestException('CLICKED_AND_RATING_MUST_NOT_BE_UNDEFINED');
+
     const newInteraction = await new this.interactionModel({
       user: userId,
       newsArticleId: newsArticleId,
       clicked: clicked,
+      rating: rating,
+      timestamp: new Date(),
     });
     return await newInteraction.save();
   }

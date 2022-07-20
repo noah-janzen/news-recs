@@ -11,6 +11,8 @@ import * as WebBrowser from 'expo-web-browser'
 import { NewsDto } from '../../../model/dto/News.dto'
 import { getTimeInterval } from '../../../util/Date'
 import { addInteraction } from '../../../api/interaction'
+import { useState } from 'react'
+import RatingModal from '../../authenticated/RatingModal'
 
 function formatSourceOrganization(sourceOrganization: string) {
   function capitalizeFirstLetter(sourceOrganization: string) {
@@ -36,41 +38,60 @@ function NewsItem({
   url,
   isLastItem,
 }: NewsDto & { isLastItem: boolean }) {
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [alreadyRated, setAlreadyRated] = useState(false)
+
   function openNewsArticleHandler() {
     addInteraction({ newsArticleId: id, clicked: true })
-    WebBrowser.openBrowserAsync(url)
+    WebBrowser.openBrowserAsync(url).then(() => {
+      if (alreadyRated) return
+      setIsModalVisible(true)
+    })
   }
 
   return (
-    <View style={[styles.container, isLastItem && styles.lastItem]}>
-      <Pressable
-        onPress={openNewsArticleHandler}
-        style={({ pressed }) => [
-          styles.pressableContainer,
-          pressed && isIOS && styles.pressed,
-        ]}
-        android_ripple={{
-          color: '#ccc',
-        }}
-      >
-        {!!image && <Image style={styles.image} source={{ uri: image }} />}
-        <View style={styles.innerContainer}>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.headline}>
-            {headline}
-          </Text>
+    <>
+      <View style={[styles.container, isLastItem && styles.lastItem]}>
+        <Pressable
+          onPress={openNewsArticleHandler}
+          style={({ pressed }) => [
+            styles.pressableContainer,
+            pressed && isIOS && styles.pressed,
+          ]}
+          android_ripple={{
+            color: '#ccc',
+          }}
+        >
+          {!!image && <Image style={styles.image} source={{ uri: image }} />}
+          <View style={styles.innerContainer}>
+            <Text
+              numberOfLines={2}
+              ellipsizeMode="tail"
+              style={styles.headline}
+            >
+              {headline}
+            </Text>
 
-          <View style={styles.metaContainer}>
-            <Text style={styles.metaText}>
-              {getTimeInterval(new Date(datePublished))}
-            </Text>
-            <Text style={[styles.metaText, styles.separator]}> ● </Text>
-            <Text style={styles.metaText}>
-              {formatSourceOrganization(sourceOrganization)}
-            </Text>
+            <View style={styles.metaContainer}>
+              <Text style={styles.metaText}>
+                {getTimeInterval(new Date(datePublished))}
+              </Text>
+              <Text style={[styles.metaText, styles.separator]}> ● </Text>
+              <Text style={styles.metaText}>
+                {formatSourceOrganization(sourceOrganization)}
+              </Text>
+            </View>
           </View>
-        </View>
-      </Pressable>
-    </View>
+        </Pressable>
+      </View>
+      <RatingModal
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        onRated={() => setAlreadyRated(true)}
+        newsArticleId={id}
+        newsHeadline={headline}
+      />
+    </>
   )
 }
 

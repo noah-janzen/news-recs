@@ -29,6 +29,15 @@ export const de = {
       day: 'Tag',
       days: 'Tagen',
     },
+    RatingModal: {
+      title: 'Findest Du die gelesene Nachricht interessant?',
+      ratingItemLabels: {
+        no: 'Nein! 🥱',
+        neutral: 'Neutral 😶',
+        yes: 'Ja! 🤩',
+      },
+      skipButtonLabel: 'Überspringen',
+    },
   },
   WelcomeScreen: {
     welcomeTitle: 'Willkommen bei NewsRecs',

@@ -24,15 +24,18 @@ export class Interaction {
 
   @Prop({
     required: true,
-    default: new Date(),
   })
   timestamp: Date;
 
   @Prop({
-    required: true,
-    default: false,
+    required: false,
   })
   clicked: boolean;
+
+  @Prop({
+    required: false,
+  })
+  rating: string;
 }
 
 export const InteractionSchema = SchemaFactory.createForClass(Interaction);
