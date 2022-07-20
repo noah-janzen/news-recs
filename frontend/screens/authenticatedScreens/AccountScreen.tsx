@@ -22,6 +22,7 @@ import { getOwnUser, updateOwnUser } from '../../api/user'
 import { dateToDateEntered, parseDate } from '../../util/Date'
 import { UserUpdateDto } from '../../model/dto/UserUpdate.dto'
 import { User } from '../../model/dto/User.dto'
+import { clearInteractions } from '../../store/interactionsSlice'
 
 function AccountScreen() {
   interface UserForm {
@@ -100,6 +101,7 @@ function AccountScreen() {
 
   async function logoutHandler() {
     await logoutAPI()
+    dispatch(clearInteractions())
     dispatch(logout())
   }
 

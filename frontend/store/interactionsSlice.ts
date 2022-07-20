@@ -24,9 +24,12 @@ export const interactionsSlice = createSlice({
       state.interactions[interaction.newsArticleId] =
         state.interactions[interaction.newsArticleId] || interaction.clicked
     },
+    clearInteractions: (state) => {
+      state.interactions = {}
+    },
   },
 })
 
-export const { addInteraction } = interactionsSlice.actions
+export const { addInteraction, clearInteractions } = interactionsSlice.actions
 
 export default interactionsSlice.reducer
