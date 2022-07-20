@@ -8,12 +8,6 @@ export enum Gender {
   D = 'D',
 }
 
-// ISO 639-1: two-letter codes
-export enum Language {
-  EN = 'EN',
-  DE = 'DE',
-}
-
 export type UserDocument = User & Document;
 
 @Schema()
@@ -63,13 +57,6 @@ export class User {
     type: Date,
   })
   dateOfBirth: Date;
-
-  @Prop({
-    required: true,
-    type: String,
-    enum: Language,
-  })
-  language: Language;
 
   @Prop()
   changePasswordToken: string;

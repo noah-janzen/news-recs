@@ -8,7 +8,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { Date } from 'mongoose';
-import { Gender, Language } from '../../users/user.model';
+import { Gender } from '../../users/user.model';
 
 export class CreateUserDto {
   @IsEmail()
@@ -26,7 +26,4 @@ export class CreateUserDto {
 
   @IsDateString()
   readonly dateOfBirth: Date;
-
-  @IsEnum(Language)
-  readonly language: Language;
 }

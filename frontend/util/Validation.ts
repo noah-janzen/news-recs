@@ -1,10 +1,6 @@
 import { DateEntered } from '../model/DateEntered'
 import { parseDate } from './Date'
 
-export function languageValid(language: string | null) {
-  return !!language
-}
-
 export function genderValid(gender: string | null) {
   return !!gender
 }

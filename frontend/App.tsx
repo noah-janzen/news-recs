@@ -43,7 +43,7 @@ import LoginScreen from './screens/unauthenticatedScreens/LoginScreen'
 import AppLoading from './screens/unauthenticatedScreens/AppLoading'
 import RegistrationCredentialsScreen from './screens/unauthenticatedScreens/RegistrationCredentialsScreen'
 import RegistrationPersonalDataScreen from './screens/unauthenticatedScreens/RegistrationPersonalDataScreen'
-import RegistrationLanguageScreen from './screens/unauthenticatedScreens/RegistrationLanguageScreen'
+import RegistrationDateOfBirthScreen from './screens/unauthenticatedScreens/RegistrationDateOfBirthScreen'
 import { GlobalStyles } from './constants/style'
 import ConfirmAccountScreen from './screens/unauthenticatedScreens/ConfirmAccountScreen'
 import NewsFeed from './screens/authenticatedScreens/NewsFeed'
@@ -106,14 +106,14 @@ function AuthStack() {
         }}
       />
       <Stack.Screen
-        name="RegistrationLanguageScreen"
-        component={RegistrationLanguageScreen}
+        name="RegistrationDateOfBirthScreen"
+        component={RegistrationDateOfBirthScreen}
         options={{
           ...registrationHeaderOptions,
         }}
       />
       <Stack.Screen
-        name="RegistrationPersonalDataScreen"
+        name="RegistrationGenderScreen"
         component={RegistrationPersonalDataScreen}
         options={{
           ...registrationHeaderOptions,

@@ -2,13 +2,11 @@ import { useState } from 'react'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { DateEntered } from '../../model/DateEntered'
-import { genderValid, registrationDateValid } from '../../util/Validation'
+import { genderValid } from '../../util/Validation'
 import { StoreReducer } from '../../store/rootReducer'
 import { setValue } from '../../store/registrationSlice'
 import ButtonInput from '../../components/ui/ButtonInput'
 import ExpiryContainer from '../../components/ui/ExpiryContainer'
-import DateInput from '../../components/ui/DateInput'
 import i18n from '../../i18n'
 
 const genders = [
@@ -34,53 +32,30 @@ function RegistrationPersonalDataScreen({ navigation }: Props) {
   const [submitted, setSubmitted] = useState(false)
   const dispatch = useDispatch()
 
-  const dateOfBirth = useSelector(
-    (state: StoreReducer) => state.registration.dateOfBirth
-  )
   const gender = useSelector((state: StoreReducer) => state.registration.gender)
 
-  function inputChangedHandler(inputIdentifier: string, enteredValue: any) {
+  function genderChangedHandler(selectedGender: string) {
     dispatch(
       setValue({
-        identifier: inputIdentifier,
-        value: enteredValue,
+        identifier: 'gender',
+        value: selectedGender,
       })
     )
   }
 
   function nextHandler() {
     setSubmitted(true)
-    if (!formValid()) return
+    if (!genderValid(gender)) return
 
     navigation.navigate('RegistrationCredentialsScreen')
   }
 
-  function formValid() {
-    return registrationDateValid(dateOfBirth) && genderValid(gender)
-  }
-
   return (
-    <ExpiryContainer onNext={nextHandler} nextDisabled={!formValid()}>
-      <DateInput
-        label={i18n.t('RegistrationPersonalDataScreen.dateOfBirthInput.label')}
-        onDateChanged={(date: DateEntered) =>
-          inputChangedHandler('dateOfBirth', date)
-        }
-        initialDate={dateOfBirth}
-        invalid={
-          registrationDateValid(dateOfBirth)
-            ? null
-            : i18n.t(
-                'RegistrationPersonalDataScreen.dateOfBirthInput.errorLabel'
-              )
-        }
-        submitted={submitted}
-      />
-
+    <ExpiryContainer onNext={nextHandler} nextDisabled={!genderValid(gender)}>
       <ButtonInput
         label={i18n.t('RegistrationPersonalDataScreen.sexInput.label')}
         submitted={submitted}
-        onSelect={(gender: string) => inputChangedHandler('gender', gender)}
+        onSelect={genderChangedHandler}
         activeElement={gender}
         errorLabel={i18n.t(
           'RegistrationPersonalDataScreen.sexInput.errorLabel'
