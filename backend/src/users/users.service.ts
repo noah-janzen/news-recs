@@ -1,10 +1,15 @@
 import { Model } from 'mongoose';
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { User, UserDocument } from './user.model';
 import { CreateUserDto } from 'src/auth/dto';
+import { UserUpdateDto } from './dto/user-update.dto';
 
 @Injectable()
 export class UsersService {
@@ -117,6 +122,36 @@ export class UsersService {
     await user.save();
   }
 
+  async getOwnUser(userId: string) {
+    const user = await this.findById(userId);
+    return {
+      id: user.id,
+      dateOfBirth: user.dateOfBirth,
+      gender: user.gender,
+      email: user.email,
+      registrationTimestamp: user.registrationTimestamp,
+    };
+  }
+
+  async updateUser(userId: string, userUpdate: UserUpdateDto) {
+    const user = await this.findById(userId);
+
+    try {
+      if (userUpdate.dateOfBirth) user.dateOfBirth = userUpdate.dateOfBirth;
+      if (userUpdate.gender) user.gender = userUpdate.gender;
+      if (userUpdate.email) user.email = userUpdate.email;
+
+      await user.save();
+    } catch (error) {
+      if (this.emailAlreadyRegistered(error)) {
+        throw new BadRequestException('EMAIL_ALREADY_REGISTERED');
+      }
+      throw error;
+    }
+
+    return this.getOwnUser(user.id);
+  }
+
   /**
    * Helper method to generate a token
    * @returns generated token
@@ -138,5 +173,14 @@ export class UsersService {
     const userCounter = parseInt(userId.slice(18, 24), 16);
     const numberOfGroups = 2;
     return userCounter % numberOfGroups;
+  }
+
+  /**
+   * Helper method that evaluates whether the email has already been registered
+   * @param error MongoDB error
+   * @returns true iff the email has already been registered
+   */
+  emailAlreadyRegistered(error) {
+    return error.code === 11000 && error.keyPattern.email === 1;
   }
 }

@@ -8,21 +8,7 @@ import { setValue } from '../../store/registrationSlice'
 import ButtonInput from '../../components/ui/ButtonInput'
 import ExpiryContainer from '../../components/ui/ExpiryContainer'
 import i18n from '../../i18n'
-
-const genders = [
-  {
-    label: i18n.t('common.GenderInput.maleLabel'),
-    id: 'M',
-  },
-  {
-    label: i18n.t('common.GenderInput.femaleLabel'),
-    id: 'W',
-  },
-  {
-    label: i18n.t('common.GenderInput.diversLabel'),
-    id: 'D',
-  },
-]
+import { GENDERS } from '../../util/Gender'
 
 export type Props = {
   navigation: NavigationProp<ParamListBase>
@@ -60,7 +46,7 @@ function RegistrationPersonalDataScreen({ navigation }: Props) {
         errorLabel={i18n.t(
           'RegistrationPersonalDataScreen.sexInput.errorLabel'
         )}
-        items={genders}
+        items={GENDERS}
       />
     </ExpiryContainer>
   )

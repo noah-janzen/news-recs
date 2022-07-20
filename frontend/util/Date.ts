@@ -15,6 +15,14 @@ export function parseDate({ year, month, day }: DateEntered) {
   return new Date(dateISOString)
 }
 
+export function dateToDateEntered(date: Date) {
+  return {
+    day: date.getDate().toString(),
+    month: (date.getMonth() + 1).toString(),
+    year: date.getFullYear().toString(),
+  }
+}
+
 export function getTimeInterval(date: Date) {
   const now = new Date()
   const timeIntervalInMinutes = Math.ceil(

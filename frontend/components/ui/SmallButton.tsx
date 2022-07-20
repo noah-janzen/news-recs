@@ -10,7 +10,7 @@ import {
 export type Props = {
   onPress: () => void
   children: React.ReactNode | string
-  style: StyleProp<ViewStyle>
+  style?: StyleProp<ViewStyle>
 }
 
 function SmallButton({ style, onPress, children }: Props) {

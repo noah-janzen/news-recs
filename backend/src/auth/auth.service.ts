@@ -49,7 +49,7 @@ export class AuthService {
         confirmationTokenTimestamp,
       });
     } catch (error) {
-      if (this.emailAlreadyRegistered(error)) {
+      if (this.usersService.emailAlreadyRegistered(error)) {
         throw new BadRequestException('EMAIL_ALREADY_REGISTERED');
       }
       throw error;
@@ -317,14 +317,5 @@ export class AuthService {
     }
 
     return user;
-  }
-
-  /**
-   * Helper method that evaluates whether the email has already been registered
-   * @param error MongoDB error
-   * @returns true iff the email has already been registered
-   */
-  private emailAlreadyRegistered(error) {
-    return error.code === 11000 && error.keyPattern.email === 1;
   }
 }

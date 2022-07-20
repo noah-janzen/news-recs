@@ -157,6 +157,31 @@ export const en = {
   AccountScreen: {
     headerTitle: 'Account',
     logoutButtonLabel: 'Sign out',
+    inputs: {
+      dateOfBirth: {
+        label: 'Date of birth',
+        errorLabel:
+          'Enter a valid date of birth. You must be at least 18 years old.',
+      },
+      sex: {
+        label: 'Sex',
+        errorLabel: 'Select a gender',
+      },
+      email: {
+        label: 'Email',
+        errorLabel: 'Enter a valid email address',
+      },
+    },
+    saveChangesButtonLabel: 'Save changes',
+    successAlert: {
+      title: 'Account updated',
+      description: 'You have successfully updated your account data.',
+    },
+    errorAlert: {
+      title: 'Error',
+      EMAIL_ALREADY_REGISTERED:
+        'The email address entered is already in use by another account.',
+    },
   },
   NewsFeedScreen: {
     headerTitle: 'Newsfeed',
