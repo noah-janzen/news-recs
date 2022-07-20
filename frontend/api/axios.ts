@@ -5,7 +5,7 @@ import { store } from '../store/store'
 import { refreshTokens } from '../store/authSlice'
 
 // TODO: Store in config file
-const BACKEND_URL = 'http://192.168.178.34:3000'
+const BACKEND_URL = 'http://localhost:3000'
 
 const axiosPublic = axios.create({
   baseURL: BACKEND_URL,
