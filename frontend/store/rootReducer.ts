@@ -29,6 +29,6 @@ const mainPersistsConfig = {
 // Combine them together
 export const rootReducer = combineReducers({
   registration: registrationReducer,
-  interactions: persistReducer(mainPersistsConfig, interactionsReducer),
+  interactions: interactionsReducer,
   auth: persistReducer(securePersistConfig, authReducer),
 })
