@@ -6,7 +6,7 @@ import { User } from 'src/users/user.model';
 
 export type InteractionDocument = Interaction & Document;
 
-@Schema()
+@Schema({ versionKey: false })
 export class Interaction {
   id: string;
 
@@ -26,7 +26,7 @@ export class Interaction {
     required: true,
     default: new Date(),
   })
-  lastInteraction: Date;
+  timestamp: Date;
 
   @Prop({
     required: true,

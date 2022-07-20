@@ -22,16 +22,6 @@ export class InteractionsService {
     newsArticleId: string;
     clicked: boolean;
   }) {
-    const existingInteraction = await this.interactionModel.findOne({
-      $and: [{ user: userId }, { newsArticleId: newsArticleId }],
-    });
-
-    if (existingInteraction) {
-      existingInteraction.lastInteraction = new Date();
-      existingInteraction.clicked = existingInteraction.clicked || clicked;
-      return await existingInteraction.save();
-    }
-
     const newInteraction = await new this.interactionModel({
       user: userId,
       newsArticleId: newsArticleId,
