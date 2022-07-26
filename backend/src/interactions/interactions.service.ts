@@ -18,19 +18,31 @@ export class InteractionsService {
     newsArticleId,
     clicked,
     rating,
+    ratingControlType,
   }: {
     userId: string;
     newsArticleId: string;
     clicked?: boolean;
-    rating?: string;
+    rating?: number | string;
+    ratingControlType?: string;
   }) {
     if (clicked == undefined && rating == undefined)
       throw new BadRequestException('CLICKED_AND_RATING_MUST_NOT_BE_UNDEFINED');
+
+    if (
+      (rating != null && ratingControlType == null) ||
+      (rating == null && ratingControlType != null)
+    ) {
+      throw new BadRequestException(
+        'RATING_AND_RATINGCONTROLTYPE_MUST_BE_BOTH_SET_OR_UNDEFINED',
+      );
+    }
 
     const newInteraction = await new this.interactionModel({
       user: userId,
       newsArticleId: newsArticleId,
       clicked: clicked,
+      ratingControlType: ratingControlType,
       rating: rating,
       timestamp: new Date(),
     });

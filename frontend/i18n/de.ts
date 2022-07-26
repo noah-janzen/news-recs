@@ -32,9 +32,18 @@ export const de = {
     RatingModal: {
       title: 'Findest Du die gelesene Nachricht interessant?',
       ratingItemLabels: {
-        no: 'Nein! 🥱',
-        neutral: 'Neutral 😶',
-        yes: 'Ja! 🤩',
+        binary: {
+          notInteresting: 'Nein! 🥱',
+          interesting: 'Ja! 🤩',
+        },
+        range: {
+          leftLabel: 'uninteressant',
+          rightLabel: 'interessant',
+        },
+        text: {
+          placeholder: 'Dein Feedback…',
+          buttonLabel: 'Feedback senden',
+        },
       },
       skipButtonLabel: 'Überspringen',
     },

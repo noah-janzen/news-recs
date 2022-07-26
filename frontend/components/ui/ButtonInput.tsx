@@ -9,12 +9,12 @@ export type item = {
 }
 
 export type Props = {
-  label: string
+  label: string | null
   activeElement: string | null
   onSelect: (item: string) => void
   submitted: boolean
   items: item[]
-  errorLabel: string
+  errorLabel: string | null
 }
 
 function ButtonInput({
@@ -29,7 +29,7 @@ function ButtonInput({
 
   return (
     <View style={styles.outerContainer}>
-      <InputLabel>{label}</InputLabel>
+      {label != null && <InputLabel>{label}</InputLabel>}
 
       <View style={styles.container}>
         {items.map((item, index) => (
@@ -68,7 +68,7 @@ function ButtonInput({
           </Pressable>
         ))}
       </View>
-      {showError && <ErrorLabel>{errorLabel}</ErrorLabel>}
+      {showError && errorLabel != null && <ErrorLabel>{errorLabel}</ErrorLabel>}
     </View>
   )
 }

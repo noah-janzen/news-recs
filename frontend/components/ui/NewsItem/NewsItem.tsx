@@ -90,6 +90,7 @@ function NewsItem({
         onRated={() => setAlreadyRated(true)}
         newsArticleId={id}
         newsHeadline={headline}
+        ratingControlType="binary" // TODO: outsource in env constant or retrieve from webserver
       />
     </>
   )

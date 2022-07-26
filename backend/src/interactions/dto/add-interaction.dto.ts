@@ -9,5 +9,8 @@ export class AddInteractionDto {
   clicked?: boolean;
 
   @IsOptional()
-  rating?: string;
+  ratingControlType: string;
+
+  @IsOptional()
+  rating?: number | string;
 }

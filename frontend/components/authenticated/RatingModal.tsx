@@ -1,9 +1,18 @@
 import { useState } from 'react'
-import { Modal, StyleSheet, Text, View } from 'react-native'
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+  KeyboardAvoidingView,
+} from 'react-native'
+
 import { addInteraction } from '../../api/interaction'
 import { GlobalStyles } from '../../constants/style'
 import i18n from '../../i18n'
-import ButtonInput from '../ui/ButtonInput'
+import BinaryControl from '../ui/ratingControls/BinaryControl'
+import RangeControl from '../ui/ratingControls/RangeControl'
+import TextControl from '../ui/ratingControls/TextControl'
 import SmallButton from '../ui/SmallButton'
 
 export type Props = {
@@ -12,22 +21,8 @@ export type Props = {
   onRated: () => void
   newsArticleId: string
   newsHeadline: string
+  ratingControlType: 'binary' | 'range' | 'text'
 }
-
-const RATING_ITEMS = [
-  {
-    id: '-1',
-    label: i18n.t('common.RatingModal.ratingItemLabels.no'),
-  },
-  {
-    id: '0',
-    label: i18n.t('common.RatingModal.ratingItemLabels.neutral'),
-  },
-  {
-    id: '1',
-    label: i18n.t('common.RatingModal.ratingItemLabels.yes'),
-  },
-]
 
 function RatingModal({
   visible,
@@ -35,17 +30,59 @@ function RatingModal({
   newsArticleId,
   newsHeadline,
   onRated,
+  ratingControlType,
 }: Props) {
-  const [sentiment, setSentiment] = useState('')
+  const [rating, setRating] = useState<any>()
 
-  async function onSelectSentiment(sentimentId: string) {
-    setSentiment(sentimentId)
-
-    addInteraction({ newsArticleId: newsArticleId, rating: sentimentId })
-
+  async function rateHandler(rating: any) {
+    setRating(rating)
+    addInteraction({ newsArticleId, rating, ratingControlType })
     onRated()
-
     setTimeout(() => onClose(), 350)
+  }
+
+  let ratingControl
+  switch (ratingControlType) {
+    case 'binary':
+      ratingControl = (
+        <BinaryControl
+          onRate={rateHandler}
+          rating={rating}
+          leftLabel={i18n.t(
+            'common.RatingModal.ratingItemLabels.binary.notInteresting'
+          )}
+          rightLabel={i18n.t(
+            'common.RatingModal.ratingItemLabels.binary.interesting'
+          )}
+        />
+      )
+      break
+    case 'range':
+      ratingControl = (
+        <RangeControl
+          onRate={rateHandler}
+          rating={rating}
+          leftLabel={i18n.t(
+            'common.RatingModal.ratingItemLabels.range.leftLabel'
+          )}
+          rightLabel={i18n.t(
+            'common.RatingModal.ratingItemLabels.range.rightLabel'
+          )}
+        />
+      )
+      break
+    case 'text':
+      ratingControl = (
+        <TextControl
+          onRate={rateHandler}
+          placeholder={i18n.t(
+            'common.RatingModal.ratingItemLabels.text.placeholder'
+          )}
+          buttonLabel={i18n.t(
+            'common.RatingModal.ratingItemLabels.text.buttonLabel'
+          )}
+        />
+      )
   }
 
   return (
@@ -56,19 +93,18 @@ function RatingModal({
       style={styles.modalContainer}
     >
       <View style={styles.outerContainer}>
-        <View style={styles.innerContainer}>
-          <Text style={styles.title}>{i18n.t('common.RatingModal.title')}</Text>
-          <Text style={styles.headline}>{newsHeadline}</Text>
-          <ButtonInput
-            items={RATING_ITEMS}
-            submitted={false}
-            onSelect={onSelectSentiment}
-            activeElement={sentiment}
-          />
-          <SmallButton style={styles.skipButton} onPress={onClose}>
-            {i18n.t('common.RatingModal.skipButtonLabel')}
-          </SmallButton>
-        </View>
+        <KeyboardAvoidingView behavior="padding">
+          <View style={styles.innerContainer}>
+            <Text style={styles.title}>
+              {i18n.t('common.RatingModal.title')}
+            </Text>
+            <Text style={styles.headline}>{newsHeadline}</Text>
+            {ratingControl}
+            <SmallButton style={styles.skipButton} onPress={onClose}>
+              {i18n.t('common.RatingModal.skipButtonLabel')}
+            </SmallButton>
+          </View>
+        </KeyboardAvoidingView>
       </View>
     </Modal>
   )
@@ -84,11 +120,11 @@ const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: 'rgba(0,0,0,.6)',
     flex: 1,
+    justifyContent: 'flex-end',
   },
   innerContainer: {
     paddingHorizontal: 12,
     paddingVertical: 16,
-    marginTop: 'auto',
     width: 'auto',
     minHeight: 150,
     backgroundColor: 'white',
@@ -107,7 +143,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#555',
     textAlign: 'center',
-    marginBottom: -12,
+    marginBottom: 12,
   },
   skipButton: {
     marginTop: 2,

@@ -17,6 +17,7 @@ export class InteractionsController {
       newsArticleId: addInteractionDto.newsArticleId,
       clicked: addInteractionDto.clicked,
       rating: addInteractionDto.rating,
+      ratingControlType: addInteractionDto.ratingControlType,
     });
   }
 }

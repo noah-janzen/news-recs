@@ -34,8 +34,14 @@ export class Interaction {
 
   @Prop({
     required: false,
+    type: mongoose.Schema.Types.Mixed,
   })
-  rating: string;
+  rating: number | string;
+
+  @Prop({
+    required: false,
+  })
+  ratingControlType: string;
 }
 
 export const InteractionSchema = SchemaFactory.createForClass(Interaction);
