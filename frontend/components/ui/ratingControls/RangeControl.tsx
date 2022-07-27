@@ -5,12 +5,11 @@ import { GlobalStyles } from '../../../constants/style'
 
 export type Props = {
   onRate: (rating: any) => Promise<void>
-  rating: any
   leftLabel: string
   rightLabel: string
 }
 
-function RangeControl({ onRate, rating, leftLabel, rightLabel }: Props) {
+function RangeControl({ onRate, leftLabel, rightLabel }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.labelsContainer}>

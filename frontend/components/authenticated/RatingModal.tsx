@@ -61,7 +61,6 @@ function RatingModal({
       ratingControl = (
         <RangeControl
           onRate={rateHandler}
-          rating={rating}
           leftLabel={i18n.t(
             'common.RatingModal.ratingItemLabels.range.leftLabel'
           )}
