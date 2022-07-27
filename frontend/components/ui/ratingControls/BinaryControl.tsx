@@ -1,6 +1,5 @@
 import { View } from 'react-native'
 
-import i18n from '../../../i18n'
 import ButtonInput from '../ButtonInput'
 
 export type Props = {
