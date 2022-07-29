@@ -7,11 +7,16 @@ import { getNews } from '../../api/news'
 import { addInteraction as addInteractionAPI } from '../../api/interaction'
 import { addInteraction } from '../../store/interactionsSlice'
 import { store } from '../../store/store'
+import { SurveyDto } from '../../model/dto/Survey.dto'
+import { getSurveys } from '../../api/surveys'
+import SurveyModal from '../../components/authenticated/SurveyModal'
 
 function NewsFeed() {
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [newsItems, setNewsItems] = useState<NewsDto[]>([])
+  const [surveys, setSurveys] = useState<SurveyDto[]>()
+  const [isSurveyModalVisible, setIsSurveyModalVisible] = useState(false)
 
   const onViewRef = useRef((viewableItems: any) => {
     viewableItems.changed.forEach((visibleNewsArticle: any) => {
@@ -62,6 +67,19 @@ function NewsFeed() {
     fetchInitialNews()
   }, [])
 
+  useEffect(() => {
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000
+    const interval = setInterval(async () => {
+      const surveys = await getSurveys()
+      setSurveys(surveys)
+    }, 1000 * 15)
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    if (surveys && surveys.length > 0) setIsSurveyModalVisible(true)
+  }, [surveys])
+
   if (isInitialLoading) {
     return (
       <View style={{ flex: 1, alignItems: 'center', marginTop: 30 }}>
@@ -105,6 +123,13 @@ function NewsFeed() {
         onViewableItemsChanged={onViewRef.current}
         ListFooterComponent={<BottomLoadingIndicator />}
       />
+      {isSurveyModalVisible && (
+        <SurveyModal
+          visible={isSurveyModalVisible}
+          onClose={() => setIsSurveyModalVisible(false)}
+          survey={surveys![0]}
+        />
+      )}
     </View>
   )
 }

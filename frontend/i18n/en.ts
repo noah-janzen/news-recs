@@ -47,6 +47,12 @@ export const en = {
       },
       skipButtonLabel: 'Skip',
     },
+    survey: {
+      title: 'User Survey',
+      backButtonLabel: 'Back',
+      nextButtonLabel: 'Next',
+      submitButtonLabel: 'Submit',
+    },
   },
   WelcomeScreen: {
     welcomeTitle: 'Welcome to NewsRecs',

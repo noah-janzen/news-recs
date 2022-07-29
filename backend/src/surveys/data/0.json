@@ -1,0 +1,83 @@
+{
+  "surveyId": 0,
+  "startDate": "2022-07-20T10:00:00.000+00:00",
+  "endDate": "2022-08-27T10:00:00.000+00:00",
+  "startsAfterDaysSinceRegistration": 3,
+  "durationInDays": 7,
+  "questions": [
+    {
+      "question": {
+        "en": "How satisfied are you with the recommendation algorithm?",
+        "de": "Wie zufrieden bist Du mit dem Empfehlungsalgorithmus?"
+      },
+      "questionType": "RADIO",
+      "answerOptions": [
+        {
+          "value": 4,
+          "answer": {
+            "en": "Very satisfied",
+            "de": "Sehr zufrieden"
+          }
+        },
+        {
+          "value": 3,
+          "answer": {
+            "en": "Satisfied",
+            "de": "Zufrieden"
+          }
+        },
+        {
+          "value": 2,
+          "answer": {
+            "en": "Neither satisfied nor dissatisfied",
+            "de": "Weder zufrieden noch unzufrieden"
+          }
+        },
+        {
+          "value": 1,
+          "answer": {
+            "en": "Rather dissatisfied",
+            "de": "Eher unzufrieden"
+          }
+        },
+        {
+          "value": 0,
+          "answer": {
+            "en": "Dissatisfied",
+            "de": "Unzufrieden"
+          }
+        }
+      ]
+    },
+    {
+      "question": {
+        "en": "How much do you like the algorithm on a scale of 1 (not liking it much) to 100 (liking it a lot)?",
+        "de": "Wie sehr gefällt Dir der Algorithmus auf einer Skala von 1 (wenig Gefallen) bis 100 (viel Gefallen)?"
+      },
+      "questionType": "RANGE",
+      "answerOptions": [
+        {
+          "value": 1,
+          "answer": {
+            "en": " 1 (not liking it much)",
+            "de": "1 (wenig Gefallen)"
+          }
+        },
+        {
+          "value": 100,
+          "answer": {
+            "en": "100 (liking it a lot)",
+            "de": "100 (viel Gefallen)"
+          }
+        }
+      ]
+    },
+    {
+      "question": {
+        "en": "What do you like most about the recommended news?",
+        "de": "Was gefällt Dir am meisten an den empfohlenen Nachrichten?"
+      },
+      "questionType": "TEXT"
+    }
+  ]
+}

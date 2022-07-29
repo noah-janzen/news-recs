@@ -32,6 +32,19 @@ export class SurveysController {
     });
   }
 
+  @Get(':surveyId/answers/:questionId')
+  getSurveyAnswer(
+    @GetCurrentUserId() userId: string,
+    @Param('surveyId', new ParseIntPipe()) surveyId: number,
+    @Param('questionId', new ParseIntPipe()) questionId: number,
+  ) {
+    return this.surveysService.getSurveyAnswerOfUser({
+      userId,
+      surveyId,
+      questionId,
+    });
+  }
+
   @Post(':id/answers')
   async addSurveyAnswer(
     @GetCurrentUserId() userId: string,

@@ -201,6 +201,34 @@ export class SurveysService {
       .exec();
   }
 
+  getSurveyAnswerOfUser({
+    userId,
+    surveyId,
+    questionId,
+  }: {
+    userId: string;
+    surveyId: number;
+    questionId: number;
+  }) {
+    return this.surveyAnswerModel
+      .findOne(
+        {
+          user: userId,
+          surveyId,
+          questionId,
+        },
+        {
+          surveyId: 1,
+          questionId: 1,
+          answerControlType: 1,
+          answer: 1,
+          _id: 0,
+        },
+      )
+      .lean()
+      .exec();
+  }
+
   private async isSurveyEnabledForUser({
     survey,
     user,
@@ -255,6 +283,8 @@ export class SurveysService {
       userId,
       surveyId: survey.surveyId,
     });
+    if (timestampOfFirstAnswer == null) return true;
+
     const expiryDate = DateUtil.addDays(
       timestampOfFirstAnswer,
       survey.durationInDays,
@@ -303,7 +333,7 @@ export class SurveysService {
       .lean()
       .exec();
 
-    return timestamps[0].createdTimestamp;
+    return timestamps.length === 0 ? null : timestamps[0].createdTimestamp;
   }
 
   private questionExists({ questionId, survey }) {

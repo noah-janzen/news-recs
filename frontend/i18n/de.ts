@@ -47,6 +47,12 @@ export const de = {
       },
       skipButtonLabel: 'Überspringen',
     },
+    survey: {
+      title: 'Benutzerstudie',
+      backButtonLabel: 'Zurück',
+      nextButtonLabel: 'Weiter',
+      submitButtonLabel: 'Abschließen',
+    },
   },
   WelcomeScreen: {
     welcomeTitle: 'Willkommen bei NewsRecs',
