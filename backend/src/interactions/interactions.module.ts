@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+
 import { InteractionsService } from './interactions.service';
 import { InteractionsController } from './interactions.controller';
-import { MongooseModule } from '@nestjs/mongoose';
 import { Interaction, InteractionSchema } from './interaction.model';
 
 @Module({

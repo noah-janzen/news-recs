@@ -8,4 +8,10 @@ export class DateUtil {
 
     return hoursBetweenDates < rangeInHours;
   }
+
+  static addDays(date: Date, days: number) {
+    const newDate = new Date(date);
+    newDate.setDate(date.getDate() + days);
+    return newDate;
+  }
 }

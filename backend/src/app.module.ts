@@ -1,14 +1,16 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
+
 import { MailModule } from './mail/mail.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenAuthGuard } from './common/guards';
 import { NewsArticlesModule } from './newsArticles/news-articles.module';
 import { InteractionsModule } from './interactions/interactions.module';
 import { AppLoggerMiddleware } from './middleware/app-logger.middleware';
+import { SurveysModule } from './surveys/surveys.module';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { AppLoggerMiddleware } from './middleware/app-logger.middleware';
     AuthModule,
     NewsArticlesModule,
     InteractionsModule,
+    SurveysModule,
   ],
   providers: [
     {
