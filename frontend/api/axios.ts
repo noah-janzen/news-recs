@@ -1,11 +1,9 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
+import { BACKEND_URL } from '@env'
 import { store } from '../store/store'
 import { refreshTokens } from '../store/authSlice'
-
-// TODO: Store in config file
-const BACKEND_URL = 'http://localhost:3000'
 
 const axiosPublic = axios.create({
   baseURL: BACKEND_URL,
