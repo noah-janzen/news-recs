@@ -76,7 +76,6 @@ export const de = {
     },
     errorLabel: 'Wähle eine Sprache aus',
   },
-
   RegistrationPersonalDataScreen: {
     nextLabel: 'Weiter',
     dateOfBirthInput: {
@@ -181,8 +180,33 @@ export const de = {
     },
   },
   AccountScreen: {
-    logoutButtonLabel: 'Abmelden',
     headerTitle: 'Account',
+    logoutButtonLabel: 'Abmelden',
+    inputs: {
+      dateOfBirth: {
+        label: 'Geburtsdatum',
+        errorLabel:
+          'Gib ein gültiges Geburtsdatum ein. Du musst mindest 18 Jahre alt sein.',
+      },
+      sex: {
+        label: 'Geschlecht',
+        errorLabel: 'Gib ein Geschlecht an',
+      },
+      email: {
+        label: 'E-Mail',
+        errorLabel: 'Gib eine gültige E-Mail-Adresse ein',
+      },
+    },
+    saveChangesButtonLabel: 'Änderungen speichern',
+    successAlert: {
+      title: 'Account aktualisiert',
+      description: 'Du hast erfolgreich Deinen Accountdaten aktualisiert.',
+    },
+    errorAlert: {
+      title: 'Fehler',
+      EMAIL_ALREADY_REGISTERED:
+        'Die eingegebene E-Mail-Adresse wird bereits von einem anderen Konto verwendet.',
+    },
   },
   NewsFeedScreen: {
     headerTitle: 'Newsfeed',
