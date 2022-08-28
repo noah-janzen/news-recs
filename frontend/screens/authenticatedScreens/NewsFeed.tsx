@@ -72,7 +72,7 @@ function NewsFeed() {
     const interval = setInterval(async () => {
       const surveys = await getSurveys()
       setSurveys(surveys)
-    }, 1000 * 15)
+    }, 1000 * 60 * 2)
     return () => clearInterval(interval)
   }, [])
 
