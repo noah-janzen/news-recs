@@ -55,7 +55,7 @@ export class AuthService {
       throw error;
     }
 
-    // this.mailService.sendUserConfirmation(newUser);
+    this.mailService.sendUserConfirmation(newUser);
 
     return newUser;
   }
