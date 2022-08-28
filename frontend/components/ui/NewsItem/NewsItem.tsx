@@ -12,7 +12,7 @@ import { NewsDto } from '../../../model/dto/News.dto'
 import { getTimeInterval } from '../../../util/Date'
 import { addInteraction } from '../../../api/interaction'
 import { useState } from 'react'
-import RatingModal from '../../authenticated/RatingModal'
+import RatingModal, { RatingControlType } from '../../authenticated/RatingModal'
 
 function formatSourceOrganization(sourceOrganization: string) {
   function capitalizeFirstLetter(sourceOrganization: string) {
@@ -40,6 +40,12 @@ function NewsItem({
 }: NewsDto & { isLastItem: boolean }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [alreadyRated, setAlreadyRated] = useState(false)
+
+  const ratingControlType = process.env[
+    'RATING_CONTROL_TYPE'
+  ] as RatingControlType
+
+  console.log(ratingControlType)
 
   function openNewsArticleHandler() {
     addInteraction({ newsArticleId: id, clicked: true })
@@ -90,7 +96,7 @@ function NewsItem({
         onRated={() => setAlreadyRated(true)}
         newsArticleId={id}
         newsHeadline={headline}
-        ratingControlType="binary" // TODO: outsource in env constant or retrieve from webserver
+        ratingControlType={ratingControlType}
       />
     </>
   )

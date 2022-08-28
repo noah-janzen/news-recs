@@ -15,13 +15,15 @@ import RangeControl from '../ui/ratingControls/RangeControl'
 import TextControl from '../ui/ratingControls/TextControl'
 import SmallButton from '../ui/SmallButton'
 
+export type RatingControlType = 'binary' | 'range' | 'text'
+
 export type Props = {
   visible: boolean
   onClose: () => void
   onRated: () => void
   newsArticleId: string
   newsHeadline: string
-  ratingControlType: 'binary' | 'range' | 'text'
+  ratingControlType: RatingControlType
 }
 
 function RatingModal({
