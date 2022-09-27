@@ -15,4 +15,4 @@ web-build/
 .DS_Store
 
 # environment variables
-frontend/.env
+.env
