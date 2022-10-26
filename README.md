@@ -10,14 +10,21 @@ A Mobile App Framework for Conducting and Evaluating Online Experiments for News
 
 ## Getting Started
 
+### Frontend
+
 1. Install frontend dependencies:
    ` cd frontend && npm install`
-2. Install backend dependencies:
-   ` cd backend && npm install`
+2. Create `.env` file in `frontend` folder (see `.env.example`)
 3. Start frontend
-   ` cd frontend && npm start`
-4. Start backend
-   ` cd backend && npm run start:dev`
+   `npm start`
+
+### Backend
+
+1. Install backend dependencies:
+   `cd backend && npm install`
+2. Create `.env` file in `backend` folder (see `.env.example`)
+3. Start backend
+   `npm run start:dev`
 
 ## Documentation
 
