@@ -130,6 +130,7 @@ export const en = {
       title: 'Error',
       USERNAME_OR_PASSWORD_INVALID:
         'The email or password you entered is not valid.',
+      NETWORK_ERROR: 'A network error occured. Please try again later.',
     },
     emailInput: {
       label: 'Email',

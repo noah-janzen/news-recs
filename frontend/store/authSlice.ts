@@ -43,6 +43,11 @@ export const authenticate = createAsyncThunk(
     try {
       response = await signInAPI(signInUserDto)
     } catch (error) {
+      const isNetworkError = error.status == null
+      if (isNetworkError) {
+        throw new Error('NETWORK_ERROR')
+      }
+
       // TODO: implement proper error handling (e. g. retry 3 times)
       const errorMessage = error.response.data.message
       throw new Error(errorMessage)

@@ -131,6 +131,8 @@ export const de = {
       title: 'Fehler',
       USERNAME_OR_PASSWORD_INVALID:
         'Die E-Mail-Adresse oder das Passwort ist ungültig.',
+      NETWORK_ERROR:
+        'Es ist ein Netzwerkfehler aufgetreten. Bitte versuche es später erneut.',
     },
     emailInput: {
       label: 'E-Mail',
