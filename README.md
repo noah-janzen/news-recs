@@ -1,8 +1,8 @@
-<h1 style="text-align: center">NewsRecs</h1>
+# NewsRecs
 
-<p style="text-align: center">A Mobile App Framework for Conducting and Evaluating Online Experiments for News Recommender Systems</p>
+A Mobile App Framework for Conducting and Evaluating Online Experiments for News Recommender Systems
 
-##Table of Contents
+## Table of Contents
 
 - [Getting Started](#getting-started)
 - [Documentation](#documentation)
